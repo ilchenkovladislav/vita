@@ -1,0 +1,20 @@
+.formAdding {
+    display: grid;
+    width: 400px;
+    gap: 40px;
+}
+
+.formAdding label {
+    display: block;
+}
+
+.formAdding input, .formAdding textarea {
+    display: block;
+    width: 100%;
+}
+
+.formAdding__btn {
+    padding: 20px 0;
+    border: none;
+    cursor: pointer;
+}
