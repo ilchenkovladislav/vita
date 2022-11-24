@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import Dropzone from "../Dropzone/Dropzone";
 import "./FormAdding.scss";
@@ -6,9 +6,27 @@ import "./FormAdding.scss";
 export default function FormAdding() {
   const [data, setData] = useState({
     title: "",
-    images: "",
+    images: [],
     comment: "",
   });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const clearForm = () => {
+    setData({
+      title: "",
+      images: [],
+      comment: "",
+    });
+  };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      clearForm();
+      alert("Секция добавлена");
+      setIsSubmitted(false);
+    }
+  }, [isSubmitted]);
 
   const inputHandler = (e) => {
     const { name, value } = e.target;
@@ -26,13 +44,16 @@ export default function FormAdding() {
     }));
   }, []);
 
-  const postDataOnServer = (data) => {
-    fetch("http://vita/server/", {
+  const postDataOnServer = async (data) => {
+    let response = await fetch("http://vita/server/", {
       method: "post",
       headers: { "Content-Type": "application/json;charset=utf-8" },
       body: data,
-      mode: "no-cors",
     });
+
+    let result = await response.json();
+
+    result.status ? setIsSubmitted(true) : alert("Не удалось добавить запись");
   };
 
   const handleSubmit = (e) => {
@@ -56,12 +77,11 @@ export default function FormAdding() {
           id="title"
           value={data.title}
           onChange={inputHandler}
-          placeholder="darova"
         />
       </div>
       <div>
         <label>Фотки:</label>
-        <Dropzone handleDropzone={handleDropzone} />
+        <Dropzone images={data.images} handleDropzone={handleDropzone} />
       </div>
       <div>
         <label htmlFor="comment">Комментарии:</label>

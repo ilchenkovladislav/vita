@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 import "./Dropzone.scss";
 
-export default function Dropzone({ handleDropzone }) {
-  const [files, setFiles] = useState([]);
-
+export default function Dropzone({ handleDropzone, images }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -17,20 +15,16 @@ export default function Dropzone({ handleDropzone }) {
         })
       );
 
-      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+      handleDropzone(acceptedFiles);
     },
   });
 
-  useEffect(() => {
-    handleDropzone(files);
-  }, [files, handleDropzone]);
-
   const removeImage = (id) => {
-    const result = [...files.slice(0, id), ...files.slice(id + 1)];
-    setFiles(result);
+    const result = [...images.slice(0, id), ...images.slice(id + 1)];
+    handleDropzone(result);
   };
 
-  const thumbs = files.map((file, id) => (
+  const thumbs = images.map((file, id) => (
     <div className="thumb" key={file.name}>
       <button onClick={() => removeImage(id)} className="removeBtn">
         x
@@ -49,8 +43,8 @@ export default function Dropzone({ handleDropzone }) {
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [files]);
+    return () => images.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [images]);
 
   return (
     <section className="container">
