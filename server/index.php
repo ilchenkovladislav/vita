@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: *");
-
+header("Access-Control-Allow-Methods: *");
 require("DbConnect.php");
 
 $conn = new DbConnect;
@@ -26,5 +26,19 @@ switch ($method) {
             $data = ['status' => 0, 'message' => "Failed to create record."];
         }
         echo json_encode($data);
+        break;
+    case "PUT":
+        $page = json_decode(file_get_contents('php://input'));
+        $sql = "UPDATE pages SET page= :page WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $page->id);
+        $stmt->bindParam(':page', $page->sections);
+
+        if ($stmt->execute()) {
+            $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+        } else {
+            $response = ['status' => 0, 'message' => 'Failed to update record.'];
+        }
+        echo json_encode($response);
         break;
 }
