@@ -1,10 +1,10 @@
 import React from "react";
-import FormAdding from "./components/FormAdding/FormAdding"
+import Page from "./components/Page/Page";
 
 function App() {
   return (
-    <div className="App">
-      <FormAdding />
+    <div style={{position: "relative"}} className="App">
+      <Page />
     </div>
   );
 }
