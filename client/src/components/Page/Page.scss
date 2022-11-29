@@ -1,0 +1,38 @@
+.Page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 1000px;
+    gap: 30px;
+    justify-items: center;
+    align-content: center;
+    margin: auto;
+    padding: 250px 0;
+}
+
+.Page ul {
+    list-style: none;
+    padding: 40px 50px;
+    width: 100%;
+    border: 1px solid #eee;
+
+    p {
+        margin-top: 0;
+    }
+}
+
+.Page li {
+    padding: 10px 0;
+}
+
+.page__add {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    font-size: 36px;
+    align-self: center;
+    cursor: pointer;
+
+    &:hover {
+        opacity: .6;
+    }
+}
