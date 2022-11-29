@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 import "./Dropzone.scss";
 
-export default function Dropzone({ handleDropzone, images }) {
+export default function Dropzone({ updateImages, images, onRemoveImg }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -15,29 +15,16 @@ export default function Dropzone({ handleDropzone, images }) {
         })
       );
 
-      handleDropzone(acceptedFiles);
+      updateImages(acceptedFiles);
     },
   });
 
-  const removeImage = (id) => {
-    const result = [...images.slice(0, id), ...images.slice(id + 1)];
-    handleDropzone(result);
-  };
-
   const thumbs = images.map((file, id) => (
     <div className="thumb" key={file.name}>
-      <button onClick={() => removeImage(id)} className="removeBtn">
+      <button onClick={() => onRemoveImg(id)} className="removeBtn">
         x
       </button>
-      <img
-        src={file.preview}
-        className="img"
-        alt=""
-        // Revoke data uri after image is loaded
-        onLoad={() => {
-          URL.revokeObjectURL(file.preview);
-        }}
-      />
+      <img src={file.preview} className="img" alt="" />
     </div>
   ));
 
