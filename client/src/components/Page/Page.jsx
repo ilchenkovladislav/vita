@@ -39,10 +39,10 @@ export default function Page(props) {
     setPages(copy, updatePageOnServer(pages[idxPage]));
   };
 
-  const addSection = (idxPage, section) => {
+  const addSection = (section) => {
     const copy = [...pages];
-    copy[idxPage].sections.push(section);
-    setPages(copy, updatePageOnServer(pages[idxPage]));
+    copy[pageId].sections.push(section);
+    setPages(copy, addSectionOnServer(pages[pageId]));
   };
 
   const convertPageToJson = (page) => {
@@ -64,6 +64,35 @@ export default function Page(props) {
       result.status
         ? alert("Запись успешно добавлена")
         : alert("Не удалось добавить запись");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addSectionOnServer = async (page) => {
+    const form = new FormData();
+    form.append("json", JSON.stringify(page));
+
+    if (sectionId === null) {
+      page.sections[page.sections.length - 1].images.forEach(
+        (image) => {
+          form.append("images[]", image);
+        }
+      );
+    } else {
+      page.sections[sectionId].images.forEach((image) => {
+        form.append("images[]", image);
+      });
+    }
+
+    try {
+      const res = await fetch("http://vita/server/images.php", {
+        method: "post",
+        body: form,
+      });
+
+      const result = await res.text();
+      console.log(result);
     } catch (error) {
       console.error(error);
     }

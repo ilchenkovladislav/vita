@@ -40,8 +40,7 @@ export default function FormAdding(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    props.onAdd(props.pageId, section);
+    props.onAdd(section);
   };
 
   if (!props.show) {
@@ -71,6 +70,7 @@ export default function FormAdding(props) {
       <form
         action="http://vita/server/"
         method="post"
+        encType="multipart/form-data"
         className="formAdding"
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
