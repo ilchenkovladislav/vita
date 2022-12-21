@@ -1,10 +1,10 @@
 import React from "react";
-import Page from "./components/Page/Page";
+import { AdminPanel } from "./components/AdminPanel/AdminPanel";
 
 function App() {
   return (
-    <div style={{position: "relative"}} className="App">
-      <Page />
+    <div style={{ position: "relative" }} className="App">
+      <AdminPanel />
     </div>
   );
 }

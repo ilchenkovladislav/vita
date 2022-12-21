@@ -1,18 +1,41 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Dropzone from "../Dropzone/Dropzone";
 import "./FormAdding.scss";
+import { getImages } from "../../hooks/func";
 
-export default function FormAdding(props) {
+export function FormAdding({
+  currentElement,
+  onAddSection,
+  onEditSection,
+  onCloseForm,
+  content,
+}) {
   const [section, setSection] = useState({
     title: "",
-    images: [],
     comment: "",
+    sequence: null,
+    page_id: null,
   });
 
+  const [images, setImages] = useState([]);
+
   useEffect(() => {
-    setSection(props.section);
-  }, [props.section]);
+    if (content) {
+      setSection(content);
+      getImages(content.id).then((images) => setImages(images));
+    }
+    return () => {
+      setSection({
+        title: "",
+        comment: "",
+        sequence: null,
+        page_id: null,
+      });
+
+      setImages([]);
+    };
+  }, [content]);
 
   const inputHandler = (e) => {
     const { name, value } = e.target;
@@ -23,31 +46,24 @@ export default function FormAdding(props) {
     }));
   };
 
-  const removeImage = (id) => {
-    const result = [
-      ...section.images.slice(0, id),
-      ...section.images.slice(id + 1),
-    ];
-    updateImages(result);
+  const onRemoveImage = (id) => {
+    setImages([...images.slice(0, id), ...images.slice(id + 1)]);
   };
 
-  const updateImages = useCallback((images) => {
-    setSection((prevData) => ({
-      ...prevData,
-      images,
-    }));
-  }, []);
+  const onUpdateImages = (images) => {
+    setImages((prevImgs) => [...prevImgs, ...images]);
+  };
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    props.onAdd(section);
+    if (content) {
+      onEditSection(section, images);
+    } else {
+      onAddSection(section, images);
+    }
   };
 
-  if (!props.show) {
-    return null;
-  }
-
-  function getCoords(elem) {
+  const getCoords = (elem) => {
     let box = elem.getBoundingClientRect();
 
     return {
@@ -56,23 +72,21 @@ export default function FormAdding(props) {
       bottom: box.bottom + window.pageYOffset,
       left: box.left + window.pageXOffset,
     };
-  }
+  };
 
   const formStyle = () => {
-    const form = props.ulishka.current[props.pageId].current;
-
-    let coords = getCoords(form);
+    let coords = getCoords(currentElement.current);
     return { left: coords.right + 30, top: coords.top };
   };
 
   return (
-    <div className="form__back" onClick={props.onClose}>
+    <div className="form__back" onClick={onCloseForm}>
       <form
         action="http://vita/server/"
         method="post"
         encType="multipart/form-data"
         className="formAdding"
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         onClick={(e) => e.stopPropagation()}
         style={formStyle()}
       >
@@ -89,9 +103,9 @@ export default function FormAdding(props) {
         <div>
           <label>Фотки:</label>
           <Dropzone
-            images={section.images}
-            onRemoveImg={removeImage}
-            updateImages={updateImages}
+            images={images}
+            onRemoveImg={onRemoveImage}
+            onUpdateImages={onUpdateImages}
           />
         </div>
         <div>

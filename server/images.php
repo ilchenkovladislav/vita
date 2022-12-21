@@ -8,39 +8,17 @@ $conn = new DbConnect;
 $db = $conn->connect();
 $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
-    case 'POST':
-        if (count($_FILES)) {
-            foreach ($_FILES["images"]["error"] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
-                    $tmp_name = $_FILES["images"]["tmp_name"][$key];
-
-                    $uploaddir = 'C:\OSPanel\domains\vita\server\images\\';
-                    $uploadfile = $uploaddir . basename($_FILES["images"]["name"][$key]);
-                    move_uploaded_file($tmp_name, $uploadfile);
-                }
-            }
-        }
-
-        if (count($_POST)) {
-            $page = json_decode($_POST["json"]);
-            $idSection = isset($_POST["id"]) ? $_POST["id"] : count($page->sections) - 1;
-            foreach ($page->sections[$idSection]->images as $image) {
-                $image->path = 'http://vita/server/images/' . $image->path;
-            }
-        }
-
-        $page->sections = json_encode($page->sections);
-
-        $sql = "UPDATE pages SET page= :page WHERE id = :id";
+    case 'GET':
+        $sql = "SELECT id, img FROM images WHERE section_id = :section_id";
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':id', $page->id);
-        $stmt->bindParam(':page', $page->sections);
+        $stmt->bindParam(':section_id', $_GET["id"]);
+        $stmt->execute();
+        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($stmt->execute()) {
-            $response = ['status' => 1, 'message' => 'Record updated successfully.'];
-        } else {
-            $response = ['status' => 0, 'message' => 'Failed to update record.'];
+        for ($i = 0; $i < count($images); $i++) {
+            $images[$i]["img"] = base64_encode($images[$i]["img"]);
         }
-        echo json_encode($response);
+
+        echo json_encode($images);
         break;
 }

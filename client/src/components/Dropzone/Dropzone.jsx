@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 
 import "./Dropzone.scss";
 
-export default function Dropzone({ updateImages, images, onRemoveImg }) {
+export default function Dropzone({ onUpdateImages, images, onRemoveImg }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -15,22 +15,31 @@ export default function Dropzone({ updateImages, images, onRemoveImg }) {
         })
       );
 
-      updateImages(acceptedFiles);
+      onUpdateImages(acceptedFiles);
     },
   });
 
-  const thumbs = images.map((file, id) => (
-    <div className="thumb" key={file.name}>
-      <button onClick={() => onRemoveImg(id)} className="removeBtn">
+  const thumbs = images.map((image, id) => (
+    <div className="thumb" key={image.id}>
+      <button
+        onClick={() => onRemoveImg(id)}
+        className="removeBtn"
+        type="button"
+      >
         x
       </button>
-      <img src={file.preview} className="img" alt="" />
+      <img
+        src={
+          image.preview ? image.preview : `data:image/jpeg;base64,` + image.img
+        }
+        className="img"
+        alt=""
+      />
     </div>
   ));
 
   useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => images.forEach((file) => URL.revokeObjectURL(file.preview));
+    // return () => images.forEach((image) => URL.revokeObjectURL(image.preview));
   }, [images]);
 
   return (
