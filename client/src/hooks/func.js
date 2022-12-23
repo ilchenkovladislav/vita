@@ -84,6 +84,50 @@ export const editSectionOnServer = async (section, images) => {
   }
 };
 
+export const addPageOnServer = async (title) => {
+  const data = new FormData();
+  data.append("title", title);
+
+  try {
+    const response = await fetch(`${_websiteBase}/page.php`, {
+      method: "POST",
+      body: data,
+    });
+
+    const res = await response.json();
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removePageOnServer = async (id) => {
+  try {
+    const response = await fetch(`${_websiteBase}/page.php`, {
+      method: "DELETE",
+      body: id,
+    });
+    const res = await response.text();
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editPageOnServer = async (id, title) => {
+  try {
+    const response = await fetch(`${_websiteBase}/page.php`, {
+      method: "PUT",
+      body: JSON.stringify({id, title}),
+    });
+
+    const res = await response.json();
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const getIdxById = (id, arr) => {
   return arr.findIndex((el) => el.id === id);
 };

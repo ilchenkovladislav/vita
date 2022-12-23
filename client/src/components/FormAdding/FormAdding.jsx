@@ -75,7 +75,7 @@ export function FormAdding({
   };
 
   const formStyle = () => {
-    let coords = getCoords(currentElement.current);
+    let coords = getCoords(currentElement);
     return { left: coords.right + 30, top: coords.top };
   };
 

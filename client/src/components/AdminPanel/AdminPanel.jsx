@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRef, createRef } from "react";
+import { useRef } from "react";
 import { FormAdding } from "../FormAdding/FormAdding";
 import { PageList } from "../PageList/PageList";
 import "./AdminPanel.scss";
@@ -9,6 +9,9 @@ import {
   addSectionOnServer,
   editSectionOnServer,
   getIdxById,
+  addPageOnServer,
+  removePageOnServer,
+  editPageOnServer,
 } from "../../hooks/func";
 
 export function AdminPanel() {
@@ -19,10 +22,14 @@ export function AdminPanel() {
   const ulRef = useRef([]);
 
   useEffect(() => {
-    getPages().then((pages) =>
-      setPages(pages, (ulRef.current = pages.map(() => createRef())))
-    );
+    getPages().then((pages) => {
+      setPages(pages);
+    });
   }, []);
+
+  useEffect(() => {
+    ulRef.current = ulRef.current.slice(0, pages.length);
+  }, [pages]);
 
   const onAddSection = (section, imgs) => {
     const idxPage = getIdxById(pageId, pages);
@@ -55,6 +62,28 @@ export function AdminPanel() {
     setPages(copy, deleteSectionOnServer(idSection));
   };
 
+  const onAddPage = () => {
+    const title = "Новая страница";
+    addPageOnServer(title).then((res) =>
+      setPages((prev) => [...prev, { id: res.lastId, title, sections: [] }])
+    );
+  };
+
+  const onRemovePage = (id) => {
+    const pageIdx = getIdxById(id, pages);
+    setPages((prev) => [...prev.slice(0, pageIdx), ...prev.slice(pageIdx + 1)]);
+    removePageOnServer(id);
+  };
+
+  const onEditPage = (id, title) => {
+    const pageIdx = getIdxById(id, pages);
+    let edPage = pages[pageIdx];
+    edPage.title = title;
+    setPages((prev) => {
+      return [...prev.slice(0, pageIdx), edPage, ...prev.slice(pageIdx + 1)];
+    }, editPageOnServer(id, title));
+  };
+
   const onShowForm = (pageId, sectionId = null) => {
     setShow((prevShow) => !prevShow);
     setPageId(pageId);
@@ -73,13 +102,16 @@ export function AdminPanel() {
       : pages[getIdxById(pageId, pages)].sections[
           getIdxById(sectionId, pages[getIdxById(pageId, pages)].sections)
         ];
+
   return (
     <div className="Page">
       <PageList
         pages={pages}
-        ulRef={ulRef.current}
+        ulRef={ulRef}
         onShowForm={onShowForm}
         onRemoveSection={onRemoveSection}
+        onRemovePage={onRemovePage}
+        onEditPage={onEditPage}
       />
       {show ? (
         <FormAdding
@@ -91,7 +123,9 @@ export function AdminPanel() {
         />
       ) : null}
 
-      <button className="page__add">+</button>
+      <button onClick={onAddPage} className="page__add">
+        +
+      </button>
     </div>
   );
 }
