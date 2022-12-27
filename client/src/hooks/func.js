@@ -1,6 +1,6 @@
 const _websiteBase = "http://vita/server";
 
-export async function getPages() {
+export const getPages = async () => {
   try {
     const response = await fetch(`${_websiteBase}/`);
     const pages = await response.json();
@@ -10,13 +10,25 @@ export async function getPages() {
   } catch (error) {
     throw Error(error);
   }
-}
+};
 
-export async function getImages(id) {
+export const getPage = async (href) => {
+  try {
+    const response = await fetch(`${_websiteBase}/page.php?link=${href}`);
+    const page = await response.json();
+    const res = _transformPage(page);
+
+    return res;
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
+export const getImages = async (id) => {
   const response = await fetch(`${_websiteBase}/images.php?id=${id}`);
   const images = await response.json();
   return images.map((image) => _transformImage(image));
-}
+};
 
 export async function deleteSectionOnServer(idSection) {
   try {
@@ -118,7 +130,7 @@ export const editPageOnServer = async (id, title) => {
   try {
     const response = await fetch(`${_websiteBase}/page.php`, {
       method: "PUT",
-      body: JSON.stringify({id, title}),
+      body: JSON.stringify({ id, title }),
     });
 
     const res = await response.json();
@@ -126,7 +138,7 @@ export const editPageOnServer = async (id, title) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export const getIdxById = (id, arr) => {
   return arr.findIndex((el) => el.id === id);
