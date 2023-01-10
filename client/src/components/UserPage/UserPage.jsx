@@ -1,45 +1,44 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { getPage } from "../../hooks/func";
+import { useFetch } from "../../hooks/useFetch";
 
 export const UserPage = () => {
-  const params = useParams();
+  const { href } = useParams();
 
-  const [page, setPage] = useState({ sections: [] });
-  const [isLoad, setIsLoad] = useState(true);
-
-  useEffect(() => {
-    getPage(params.href).then((p) => {
-      setPage(p);
-      setIsLoad(false);
-    });
-  }, [params]);
-
-  return isLoad ? (
-    <h1>Загрузка..</h1>
-  ) : (
-    <div>
-      <h1>{page.title}</h1>
-      {page.sections.map((section, idx) => {
-        return (
-          <div>
-            <h2>{section.title}</h2>
-            <p>{section.comments}</p>
-            <ul>
-              {section.img.map((image) => (
-                <li>
-                  <img
-                    width={100}
-                    src={`data:image/jpeg;base64,` + image.img}
-                    alt=""
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
-    </div>
+  const { data, isLoading, hasError, errorMessage } = useFetch(
+    `http://vita/server/page.php`,
+    { link: href }
   );
+
+  const RenderSections = () => {
+    return data.sections.map(({title, imgs, comment}) => {
+      return (
+        <div>
+          <h2>{title}</h2>
+          <ul>
+            {imgs.map((image) => (
+              <li>
+                <img
+                  width={1000}
+                  src={`data:image/jpeg;base64,${image.img}`}
+                  alt=""
+                />
+              </li>
+            ))}
+          </ul>
+          <p>{comment}</p>
+        </div>
+      );
+    });
+  };
+
+  if (hasError) return <h1>Error: {errorMessage}</h1>;
+  if (isLoading) return <h1>Загрузка..</h1>;
+  if (data)
+    return (
+      <div>
+        <h1>{data.title}</h1>
+        <RenderSections />
+      </div>
+    );
 };
