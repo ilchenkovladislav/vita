@@ -56,10 +56,11 @@ export function PageItem({
         pageId={id}
         onShowForm={onShowForm}
         onRemoveSection={onRemoveSection}
-      ></Sections>
+      />
 
       <button onClick={() => onShowForm(id)}>+</button>
       <button onClick={onRemovePage}>-</button>
+
       <a href={`http://localhost:3000/page/${link}`} target="_blank">
         тп
       </a>
