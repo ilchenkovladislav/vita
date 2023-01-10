@@ -56,16 +56,28 @@ export function AdminPanel() {
     let copy = [...pages];
     copy[idxPage].sections = [
       ...pages[idxPage].sections.slice(0, idxSection),
-      ...pages[idxPage].sections.slice(idxSection + 1),
+      ...pages[idxPage].sections
+        .slice(idxSection + 1)
+        .map((section) =>
+          Object.assign(section, { sequence: section.sequence - 1 })
+        ),
     ];
 
-    setPages(copy, deleteSectionOnServer(idSection));
+    setPages(copy);
+    deleteSectionOnServer(idSection);
+    copy[idxPage].sections.forEach((section) => {
+      editSectionOnServer(section);
+    });
   };
 
   const onAddPage = () => {
     const title = "Новая страница";
-    addPageOnServer(title).then((res) =>
-      setPages((prev) => [...prev, { id: res.lastId, title, sections: [] }])
+    const link = crypto.randomUUID();
+    addPageOnServer(title, link).then((res) =>
+      setPages((prev) => [
+        ...prev,
+        { id: res.lastId, title, link, sections: [] },
+      ])
     );
   };
 
@@ -103,6 +115,16 @@ export function AdminPanel() {
           getIdxById(sectionId, pages[getIdxById(pageId, pages)].sections)
         ];
 
+  const form = show ? (
+    <FormAdding
+      currentElement={ulRef.current[getIdxById(pageId, pages)]}
+      onCloseForm={onCloseForm}
+      onAddSection={onAddSection}
+      onEditSection={onEditSection}
+      content={content}
+    />
+  ) : null;
+
   return (
     <div className="Page">
       <PageList
@@ -113,15 +135,7 @@ export function AdminPanel() {
         onRemovePage={onRemovePage}
         onEditPage={onEditPage}
       />
-      {show ? (
-        <FormAdding
-          currentElement={ulRef.current[getIdxById(pageId, pages)]}
-          onCloseForm={onCloseForm}
-          onAddSection={onAddSection}
-          onEditSection={onEditSection}
-          content={content}
-        />
-      ) : null}
+      {form}
 
       <button onClick={onAddPage} className="page__add">
         +

@@ -45,16 +45,17 @@ switch ($method) {
                 $images[$j]["img"] = base64_encode($images[$j]["img"]);
             }
 
-            $page["sections"][$i]["img"] = $images;
+            $page["sections"][$i]["imgs"] = $images;
         }
 
         echo json_encode($page);
         break;
     case "POST":
         if (isset($_POST["title"])) {
-            $sql = "INSERT INTO pages(id, title) values(null, :title)";
+            $sql = "INSERT INTO pages(id, title, link) values(null, :title, :link)";
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':title', $_POST["title"]);
+            $stmt->bindParam(':link', $_POST["link"]);
 
             $response = executeSql($stmt);
         }

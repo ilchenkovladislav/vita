@@ -223,7 +223,11 @@ switch ($method) {
             }
 
             $imageIds = selectAllIdsImages($db, $section);
-            $oldImagesIds = json_decode($_PUT["oldImageIds"]);
+
+            $oldImagesIds = [];
+            if (isset($_PUT["oldImageIds"])) {
+                $oldImagesIds = json_decode($_PUT["oldImageIds"]);
+            }
 
             $idsToDelete = array_diff($imageIds, $oldImagesIds, $ids);
 

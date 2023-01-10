@@ -4,7 +4,7 @@ export const getPages = async () => {
   try {
     const response = await fetch(`${_websiteBase}/`);
     const pages = await response.json();
-    const res = pages.map((page) => _transformPage(page));
+    const res = pages.map(_transformPage);
 
     return res;
   } catch (error) {
@@ -27,7 +27,7 @@ export const getPage = async (href) => {
 export const getImages = async (id) => {
   const response = await fetch(`${_websiteBase}/images.php?id=${id}`);
   const images = await response.json();
-  return images.map((image) => _transformImage(image));
+  return images.map(_transformImage);
 };
 
 export async function deleteSectionOnServer(idSection) {
@@ -65,23 +65,25 @@ export const addSectionOnServer = async (section, images) => {
   }
 };
 
-export const editSectionOnServer = async (section, images) => {
+export const editSectionOnServer = async (section, images = null) => {
   const form = new FormData();
   form.append("section", JSON.stringify(section));
 
-  const newImages = images.filter((image) => {
-    return image.arrayBuffer !== undefined;
-  });
+  if (images) {
+    const newImages = images.filter((image) => {
+      return image.arrayBuffer !== undefined;
+    });
 
-  const oldImageIds = images
-    .filter((image) => {
-      return image.arrayBuffer === undefined;
-    })
-    .map((el) => el.id);
+    const oldImageIds = images
+      .filter((image) => {
+        return image.arrayBuffer === undefined;
+      })
+      .map((el) => el.id);
 
-  form.append("oldImageIds", JSON.stringify(oldImageIds));
+    form.append("oldImageIds", JSON.stringify(oldImageIds));
 
-  newImages.forEach((image) => form.append("newimages", image));
+    newImages.forEach((image) => form.append("newimages", image));
+  }
 
   try {
     const res = await fetch(`${_websiteBase}/section.php`, {
@@ -96,9 +98,10 @@ export const editSectionOnServer = async (section, images) => {
   }
 };
 
-export const addPageOnServer = async (title) => {
+export const addPageOnServer = async (title, link) => {
   const data = new FormData();
   data.append("title", title);
+  data.append("link", link);
 
   try {
     const response = await fetch(`${_websiteBase}/page.php`, {
@@ -145,9 +148,8 @@ export const getIdxById = (id, arr) => {
 };
 
 const _transformPage = (page) => {
-  return {
+  return Object.assign(page, {
     id: Number(page.id),
-    title: page.title,
     sections: page.sections.map((section) =>
       Object.assign(section, {
         id: Number(section.id),
@@ -155,11 +157,12 @@ const _transformPage = (page) => {
         sequence: Number(section.sequence),
       })
     ),
-  };
+  });
 };
 
 const _transformImage = (image) => {
   return Object.assign(image, {
     id: Number(image.id),
+    img: `data:image/jpeg;base64,${image.img}`,
   });
 };

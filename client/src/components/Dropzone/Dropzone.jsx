@@ -30,7 +30,7 @@ export default function Dropzone({ onUpdateImages, images, onRemoveImg }) {
       </button>
       <img
         src={
-          image.preview ? image.preview : `data:image/jpeg;base64,` + image.img
+          image.preview ?? image.img
         }
         className="img"
         alt=""
