@@ -1,6 +1,8 @@
 import React from "react";
 import { PageItem } from "../PageItem/PageItem";
 
+import "./PageList.scss";
+
 export function PageList({
   pages,
   ulRef,
@@ -8,17 +10,26 @@ export function PageList({
   onRemoveSection,
   onRemovePage,
   onEditPage,
+  onAddPage
 }) {
-  return pages.map((page, idx) => (
-    <ul ref={(el) => (ulRef.current[idx] = el)} key={idx}>
-      <PageItem
-        key={page.id}
-        page={page}
-        onShowForm={onShowForm}
-        onRemoveSection={onRemoveSection}
-        onRemovePage={() => onRemovePage(page.id)}
-        onEditPage={onEditPage}
-      />
+  return (
+    <ul className="page__list">
+      {pages.map((page, idx) => (
+        <PageItem
+          idx={idx}
+          ulRef={ulRef}
+          key={page.id}
+          page={page}
+          onShowForm={onShowForm}
+          onRemoveSection={onRemoveSection}
+          onRemovePage={() => onRemovePage(page.id)}
+          onEditPage={onEditPage}
+        />
+      ))}
+
+      <button onClick={onAddPage} className="page__add">
+        +
+      </button>
     </ul>
-  ));
+  );
 }

@@ -126,7 +126,7 @@ export function AdminPanel() {
   ) : null;
 
   return (
-    <div className="Page">
+    <div className="admin__panel">
       <PageList
         pages={pages}
         ulRef={ulRef}
@@ -134,12 +134,9 @@ export function AdminPanel() {
         onRemoveSection={onRemoveSection}
         onRemovePage={onRemovePage}
         onEditPage={onEditPage}
+        onAddPage={onAddPage}
       />
       {form}
-
-      <button onClick={onAddPage} className="page__add">
-        +
-      </button>
     </div>
   );
 }

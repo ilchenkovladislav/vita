@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Section } from "../Section/Section";
+import { Sections } from "../Sections/Sections";
 
 export function PageItem({
   page,
@@ -7,6 +7,8 @@ export function PageItem({
   onRemoveSection,
   onRemovePage,
   onEditPage,
+  ulRef,
+  idx,
 }) {
   const { id, sections, title, link } = page;
   const [edit, setEdit] = useState(false);
@@ -41,28 +43,26 @@ export function PageItem({
     );
   };
 
-  const Sections = () => {
-    return sections.map((section, idxSection) => (
-      <Section
-        key={section.id}
-        title={section.title}
-        onShowForm={() => onShowForm(id, section.id)}
-        onRemoveSection={() => onRemoveSection(id, idxSection, section.id)}
-      />
-    ));
-  };
-
   return (
-    <>
+    <li
+      ref={(el) => (ulRef.current[idx] = el)}
+      key={idx}
+      className="page__item"
+    >
       {edit ? <FormEditTitle /> : <p onClick={() => setEdit(true)}>{title}</p>}
 
-      <Sections />
+      <Sections
+        sections={sections}
+        pageId={id}
+        onShowForm={onShowForm}
+        onRemoveSection={onRemoveSection}
+      ></Sections>
 
       <button onClick={() => onShowForm(id)}>+</button>
       <button onClick={onRemovePage}>-</button>
       <a href={`http://localhost:3000/page/${link}`} target="_blank">
         тп
       </a>
-    </>
+    </li>
   );
 }
