@@ -6,23 +6,27 @@ export const getPages = async () => {
     const pages = await response.json();
     const res = pages.map(_transformPage);
 
-    return res;
-  } catch (error) {
-    throw Error(error);
-  }
-};
-
-export const getPage = async (href) => {
-  try {
-    const response = await fetch(`${_websiteBase}/page.php?link=${href}`);
-    const page = await response.json();
-    const res = _transformPage(page);
+    for (const page of res) {
+      page.sections.sort((a, b) => a.sequence - b.sequence);
+    }
 
     return res;
   } catch (error) {
     throw Error(error);
   }
 };
+
+// export const getPage = async (href) => {
+//   try {
+//     const response = await fetch(`${_websiteBase}/page.php?link=${href}`);
+//     const page = await response.json();
+//     const res = _transformPage(page);
+
+//     return res;
+//   } catch (error) {
+//     throw Error(error);
+//   }
+// };
 
 export const getImages = async (id) => {
   const response = await fetch(`${_websiteBase}/images.php?id=${id}`);
@@ -83,6 +87,8 @@ export const editSectionOnServer = async (section, images = null) => {
     form.append("oldImageIds", JSON.stringify(oldImageIds));
 
     newImages.forEach((image) => form.append("newimages", image));
+  } else {
+    form.append("sequence", true);
   }
 
   try {

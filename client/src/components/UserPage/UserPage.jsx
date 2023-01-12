@@ -11,7 +11,9 @@ export const UserPage = () => {
   );
 
   const RenderSections = () => {
-    return data.sections.map(({title, imgs, comment}) => {
+    data.sections.sort((a, b) => a.sequence - b.sequence);
+
+    return data.sections.map(({ title, imgs, comment }) => {
       return (
         <div>
           <h2>{title}</h2>

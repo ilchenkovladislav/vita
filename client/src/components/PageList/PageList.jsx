@@ -12,11 +12,8 @@ export function PageList({
   onRemovePage,
   onEditPage,
   onAddPage,
+  onDragEnd
 }) {
-
-  const onDragEnd = () => {
-
-  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

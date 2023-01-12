@@ -34,7 +34,7 @@ export function AdminPanel() {
   const onAddSection = (section, imgs) => {
     const idxPage = getIdxById(pageId, pages);
     section.page_id = pageId;
-    section.sequence = pages[idxPage].sections.length + 1;
+    section.sequence = pages[idxPage].sections.length;
 
     addSectionOnServer(section, imgs).then((id) => {
       const copy = [...pages];
@@ -108,6 +108,124 @@ export function AdminPanel() {
     setSectionId(null);
   };
 
+  const onDragEnd = (result) => {
+    const { destination, source } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    if (destination.droppableId === source.droppableId) {
+      const pageIdx = getIdxById(Number(source.droppableId), pages);
+      let copy = [...pages];
+      copy[pageIdx].sections[source.index].sequence = destination.index;
+
+      if (source.index < destination.index) {
+        copy[pageIdx].sections = copy[pageIdx].sections.map((section) => {
+          if (section.sequence < destination.index) {
+            return Object.assign(section, { sequence: section.sequence - 1 });
+          }
+
+          return section;
+        });
+        copy[pageIdx].sections[destination.index].sequence =
+          destination.index - 1;
+      }
+
+      if (source.index > destination.index) {
+        copy[pageIdx].sections = copy[pageIdx].sections.map((section) => {
+          if (section.sequence > destination.index) {
+            return Object.assign(section, { sequence: section.sequence + 1 });
+          }
+
+          return section;
+        });
+        copy[pageIdx].sections[destination.index].sequence =
+          destination.index + 1;
+      }
+
+      copy[pageIdx].sections.sort((a, b) => a.sequence - b.sequence);
+
+      setPages(copy);
+
+      for (const section of copy[pageIdx].sections) {
+        editSectionOnServer(section);
+      }
+    }
+
+    if (destination.droppableId !== source.droppableId) {
+      const sourcePageIdx = getIdxById(Number(source.droppableId), pages);
+      const destinationPageIdx = getIdxById(
+        Number(destination.droppableId),
+        pages
+      );
+      let copy = [...pages];
+
+      copy[sourcePageIdx].sections[source.index].sequence = destination.index;
+      console.log(destination.index);
+
+      copy[sourcePageIdx].sections[source.index].page_id = Number(
+        destination.droppableId
+      );
+
+      copy[destinationPageIdx].sections.push(
+        copy[sourcePageIdx].sections[source.index]
+      );
+
+      copy[sourcePageIdx].sections = [
+        ...copy[sourcePageIdx].sections.slice(0, source.index),
+        ...copy[sourcePageIdx].sections.slice(source.index + 1),
+      ];
+
+      copy[sourcePageIdx].sections = copy[sourcePageIdx].sections.map(
+        (section) => {
+          if (section.sequence > source.index) {
+            return Object.assign(section, { sequence: section.sequence - 1 });
+          }
+
+          return section;
+        }
+      );
+
+      copy[destinationPageIdx].sections = copy[destinationPageIdx].sections.map(
+        (section) => {
+          if (section.sequence > destination.index) {
+            return Object.assign(section, { sequence: section.sequence + 1 });
+          }
+
+          return section;
+        }
+      );
+
+      if (destination.index !== copy[destinationPageIdx].sections.length - 1) {
+        copy[destinationPageIdx].sections[destination.index].sequence =
+          destination.index + 1;
+      }
+
+      copy[sourcePageIdx].sections.sort((a, b) => a.sequence - b.sequence);
+      copy[destinationPageIdx].sections.sort((a, b) => a.sequence - b.sequence);
+
+      setPages(copy);
+
+      for (const section of copy[sourcePageIdx].sections) {
+        editSectionOnServer(section);
+      }
+
+      for (const section of copy[destinationPageIdx].sections) {
+        editSectionOnServer(section);
+      }
+    }
+  };
+
+  // Создаем таймер с колбэком, в стейт сохраняем его, если нажали на кнопку, то удаляем таймер, если нет, он срабатывает и отправляет запрос на сервер
+// копирование - создается таблица page-section, при переносе добавляется туда запись
   let content =
     sectionId === null
       ? null
@@ -135,6 +253,7 @@ export function AdminPanel() {
         onRemovePage={onRemovePage}
         onEditPage={onEditPage}
         onAddPage={onAddPage}
+        onDragEnd={onDragEnd}
       />
       {form}
     </div>

@@ -145,11 +145,12 @@ function insertIntoImages($db)
 
 function updateSection($db, $section)
 {
-    $sql = "UPDATE sections SET title= :title, comment= :comment, sequence= :sequence WHERE id = :id";
+    $sql = "UPDATE sections SET title= :title, comment= :comment, page_id= :page_id, sequence= :sequence WHERE id = :id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $section->id);
     $stmt->bindParam(':title', $section->title);
     $stmt->bindParam(':comment', $section->comment);
+    $stmt->bindParam(':page_id', $section->page_id);
     $stmt->bindParam(':sequence', $section->sequence);
 
     return executeSql($stmt);
@@ -216,22 +217,24 @@ switch ($method) {
         $section = json_decode($_PUT["section"]);
 
         $response = updateSection($db, $section);
-        if ($response) {
-            $ids = [];
-            if (count($_FILES)) {
-                $ids = insertIntoNewImages($db, $section);
+        if (!isset($_PUT["sequence"])) {
+            if ($response) {
+                $newIds = [];
+                if (count($_FILES)) {
+                    $newIds = insertIntoNewImages($db, $section);
+                }
+
+                $imageIds = selectAllIdsImages($db, $section);
+
+                $oldImagesIds = [];
+                if (isset($_PUT["oldImageIds"])) {
+                    $oldImagesIds = json_decode($_PUT["oldImageIds"]);
+                }
+
+                $idsToDelete = array_diff($imageIds, $oldImagesIds, $newIds);
+
+                $response = deleteImages($db, $idsToDelete);
             }
-
-            $imageIds = selectAllIdsImages($db, $section);
-
-            $oldImagesIds = [];
-            if (isset($_PUT["oldImageIds"])) {
-                $oldImagesIds = json_decode($_PUT["oldImageIds"]);
-            }
-
-            $idsToDelete = array_diff($imageIds, $oldImagesIds, $ids);
-
-            $response = deleteImages($db, $idsToDelete);
         }
 
         echo json_encode($response);
