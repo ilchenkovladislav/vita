@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import { FormAdding } from "../FormAdding/FormAdding";
 import { PageList } from "../PageList/PageList";
+import { CancelNotification } from "../CancelNotification/CancelNotification";
 import "./AdminPanel.scss";
 import {
   getPages,
@@ -15,10 +16,13 @@ import {
 } from "../../hooks/func";
 
 export function AdminPanel() {
+  const TIME_TO_DELETE = 5;
+
   const [pages, setPages] = useState([]);
   const [show, setShow] = useState(false);
   const [pageId, setPageId] = useState(null);
   const [sectionId, setSectionId] = useState(null);
+  const [timeoutId, setTimeoutId] = useState(null);
   const ulRef = useRef([]);
 
   useEffect(() => {
@@ -51,7 +55,21 @@ export function AdminPanel() {
     setPages(copy, editSectionOnServer(section, imgs));
   };
 
+  const withTimeout = (...callbacks) => {
+    setTimeoutId(
+      setTimeout(() => {
+        setTimeoutId(null);
+
+        for (const callback of callbacks) {
+          callback();
+        }
+      }, TIME_TO_DELETE * 1000)
+    );
+  };
+
   const onRemoveSection = (pageId, idxSection, idSection) => {
+    window.localStorage.setItem("tempState", JSON.stringify(pages));
+
     const idxPage = getIdxById(pageId, pages);
     let copy = [...pages];
     copy[idxPage].sections = [
@@ -64,10 +82,15 @@ export function AdminPanel() {
     ];
 
     setPages(copy);
-    deleteSectionOnServer(idSection);
-    copy[idxPage].sections.forEach((section) => {
-      editSectionOnServer(section);
-    });
+
+    const editSectionsFunctions = copy[idxPage].sections.map(
+      (section) => () => editSectionOnServer(section)
+    );
+
+    withTimeout(
+      () => deleteSectionOnServer(idSection),
+      ...editSectionsFunctions
+    );
   };
 
   const onAddPage = () => {
@@ -82,9 +105,12 @@ export function AdminPanel() {
   };
 
   const onRemovePage = (id) => {
+    window.localStorage.setItem("tempState", JSON.stringify(pages));
+
     const pageIdx = getIdxById(id, pages);
     setPages((prev) => [...prev.slice(0, pageIdx), ...prev.slice(pageIdx + 1)]);
-    removePageOnServer(id);
+
+    withTimeout(() => removePageOnServer(id));
   };
 
   const onEditPage = (id, title) => {
@@ -93,7 +119,8 @@ export function AdminPanel() {
     edPage.title = title;
     setPages((prev) => {
       return [...prev.slice(0, pageIdx), edPage, ...prev.slice(pageIdx + 1)];
-    }, editPageOnServer(id, title));
+    });
+    editPageOnServer(id, title);
   };
 
   const onShowForm = (pageId, sectionId = null) => {
@@ -224,8 +251,12 @@ export function AdminPanel() {
     }
   };
 
-  // Создаем таймер с колбэком, в стейт сохраняем его, если нажали на кнопку, то удаляем таймер, если нет, он срабатывает и отправляет запрос на сервер
-// копирование - создается таблица page-section, при переносе добавляется туда запись
+  const onStopTimer = () => {
+    clearTimeout(timeoutId);
+    setTimeoutId(null);
+    setPages(JSON.parse(window.localStorage.getItem("tempState")));
+  };
+
   let content =
     sectionId === null
       ? null
@@ -245,6 +276,12 @@ export function AdminPanel() {
 
   return (
     <div className="admin__panel">
+      {timeoutId ? (
+        <CancelNotification
+          onStopTimer={onStopTimer}
+          initTime={TIME_TO_DELETE}
+        />
+      ) : null}
       <PageList
         pages={pages}
         ulRef={ulRef}
