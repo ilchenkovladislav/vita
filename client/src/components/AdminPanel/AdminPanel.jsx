@@ -182,11 +182,6 @@ export function AdminPanel() {
         destination.droppableId
       );
 
-      console.log(destination.droppableId);
-      console.log(copy);
-      console.log(copy[destinationPageIdx]);
-      console.log(copy[destinationPageIdx].sections);
-
       copy[destinationPageIdx].sections.push(
         copy[sourcePageIdx].sections[source.index]
       );
