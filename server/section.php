@@ -188,7 +188,7 @@ function selectAllIdsImages($db, $section)
 
 function deleteImages($db, $ids)
 {
-    if (is_array($ids)) {
+    if (is_array($ids) && count($ids)) {
         foreach ($ids as $id) {
             $sql = "DELETE FROM images WHERE id = :id";
             $stmt = $db->prepare($sql);
@@ -196,8 +196,11 @@ function deleteImages($db, $ids)
 
             $response = executeSql($stmt);
         }
+
         return $response;
     }
+
+    return ['status' => 1, 'message' => "Record successfully created"];
 }
 
 switch ($method) {
@@ -215,8 +218,8 @@ switch ($method) {
     case "PUT":
         _parsePut();
         $section = json_decode($_PUT["section"]);
-
         $response = updateSection($db, $section);
+
         if (!isset($_PUT["sequence"])) {
             if ($response) {
                 $newIds = [];
