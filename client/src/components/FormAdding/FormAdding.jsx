@@ -80,6 +80,8 @@ export function FormAdding({
     } else {
       onAddSection(section, images);
     }
+
+    onCloseForm();
   };
 
   const getCoords = (elem) => {
