@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Dropzone from "../Dropzone/Dropzone";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+
 import "./FormAdding.scss";
+import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import { getImages } from "../../hooks/func";
 
 export function FormAdding({
@@ -19,16 +24,22 @@ export function FormAdding({
   });
 
   const [images, setImages] = useState([]);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
     if (content) {
       setSection(content);
       getImages(content.id).then((images) => setImages(images));
+      setEditorState(
+        EditorState.createWithContent(
+          convertFromRaw(JSON.parse(content.comment))
+        )
+      );
     }
     return () => {
       setSection({
         title: "",
-        comment: "",
+        comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
         sequence: null,
         page_id: null,
       });
@@ -43,6 +54,14 @@ export function FormAdding({
     setSection((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+    setSection((prev) => ({
+      ...prev,
+      comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
     }));
   };
 
@@ -76,7 +95,7 @@ export function FormAdding({
 
   const formStyle = () => {
     let coords = getCoords(currentElement);
-    return { left: coords.right + 30, top: coords.top };
+    return { left: coords.right + 30, top: coords.top - 25 };
   };
 
   return (
@@ -110,14 +129,10 @@ export function FormAdding({
         </div>
         <div>
           <label htmlFor="comment">Комментарии:</label>
-          <textarea
-            name="comment"
-            id="comment"
-            value={section.comment}
-            onChange={inputHandler}
-            cols="30"
-            rows="10"
-          ></textarea>
+          <Editor
+            editorState={editorState}
+            onEditorStateChange={onEditorStateChange}
+          />
         </div>
         <button className="formAdding__btn" type="submit">
           Добавить секцию

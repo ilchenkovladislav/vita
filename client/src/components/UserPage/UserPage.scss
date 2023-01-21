@@ -1,0 +1,40 @@
+.userpage {
+  padding: 50px 300px;
+}
+
+.userpage h1 {
+  font-size: 42px;
+  margin: 0;
+}
+
+.userpage h2 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.userpage__section {
+    margin-top: 75px;
+}
+
+.userpage__img-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.userpage img {
+    display: block;
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.userpage p {
+    margin: 0;
+    margin-top: 30px;
+}
