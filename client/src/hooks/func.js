@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 const _websiteBase = "http://vita/server";
 
 export const getPages = async () => {
@@ -12,21 +14,9 @@ export const getPages = async () => {
 
     return res;
   } catch (error) {
-    throw Error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
-
-// export const getPage = async (href) => {
-//   try {
-//     const response = await fetch(`${_websiteBase}/page.php?link=${href}`);
-//     const page = await response.json();
-//     const res = _transformPage(page);
-
-//     return res;
-//   } catch (error) {
-//     throw Error(error);
-//   }
-// };
 
 export const getImages = async (id) => {
   const response = await fetch(`${_websiteBase}/images.php?id=${id}`);
@@ -43,10 +33,10 @@ export async function deleteSectionOnServer(idSection) {
 
     const result = await res.json();
     result.status
-      ? alert("Запись успешно добавлена")
-      : alert("Не удалось добавить запись");
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 }
 
@@ -63,9 +53,14 @@ export const addSectionOnServer = async (section, images) => {
     });
 
     const result = await res.json();
+
+    result.status
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
+
     return result.lastId;
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
 
@@ -98,9 +93,12 @@ export const editSectionOnServer = async (section, images = null) => {
     });
 
     const result = await res.text();
-    console.log(result);
+
+    result.status
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
 
@@ -115,10 +113,15 @@ export const addPageOnServer = async (title, link) => {
       body: data,
     });
 
-    const res = await response.json();
-    return res;
+    const result = await response.json();
+
+    result.status
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
+
+    return result;
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
 
@@ -128,10 +131,14 @@ export const removePageOnServer = async (id) => {
       method: "DELETE",
       body: id,
     });
-    const res = await response.text();
-    console.log(res);
+
+    const result = await response.text();
+
+    result.status
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
 
@@ -142,10 +149,15 @@ export const editPageOnServer = async (id, title) => {
       body: JSON.stringify({ id, title }),
     });
 
-    const res = await response.json();
-    return res;
+    const result = await response.json();
+
+    result.status
+      ? toast.success("Секция успешно удалена")
+      : toast.error("Произошла ошибка, секция не удалена");
+
+    return result;
   } catch (error) {
-    console.error(error);
+    toast.error(`Произошла ошибка: ${error}`);
   }
 };
 

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import { FormAdding } from "../FormAdding/FormAdding";
 import { PageList } from "../PageList/PageList";
-import { CancelNotification } from "../CancelNotification/CancelNotification";
 import "./AdminPanel.scss";
+import { Toaster } from "react-hot-toast";
+
 import {
   getPages,
   deleteSectionOnServer,
@@ -16,13 +17,10 @@ import {
 } from "../../hooks/func";
 
 export function AdminPanel() {
-  const TIME_TO_DELETE = 5;
-
   const [pages, setPages] = useState([]);
   const [show, setShow] = useState(false);
   const [pageId, setPageId] = useState(null);
   const [sectionId, setSectionId] = useState(null);
-  const [timeoutId, setTimeoutId] = useState(null);
   const ulRef = useRef([]);
 
   useEffect(() => {
@@ -55,21 +53,7 @@ export function AdminPanel() {
     setPages(copy, editSectionOnServer(section, imgs));
   };
 
-  const withTimeout = (...callbacks) => {
-    setTimeoutId(
-      setTimeout(() => {
-        setTimeoutId(null);
-
-        for (const callback of callbacks) {
-          callback();
-        }
-      }, TIME_TO_DELETE * 1000)
-    );
-  };
-
   const onRemoveSection = (pageId, idxSection, idSection) => {
-    window.localStorage.setItem("tempState", JSON.stringify(pages));
-
     const idxPage = getIdxById(pageId, pages);
     let copy = [...pages];
     copy[idxPage].sections = [
@@ -83,14 +67,11 @@ export function AdminPanel() {
 
     setPages(copy);
 
-    const editSectionsFunctions = copy[idxPage].sections.map(
-      (section) => () => editSectionOnServer(section)
-    );
+    deleteSectionOnServer(idSection);
 
-    withTimeout(
-      () => deleteSectionOnServer(idSection),
-      ...editSectionsFunctions
-    );
+    for (const section of copy[idxPage].sections) {
+      editSectionOnServer(section);
+    }
   };
 
   const onAddPage = () => {
@@ -99,7 +80,7 @@ export function AdminPanel() {
     addPageOnServer(title, link).then((res) =>
       setPages((prev) => [
         ...prev,
-        { id: res.lastId, title, link, sections: [] },
+        { id: Number(res.lastId), title, link, sections: [] },
       ])
     );
   };
@@ -110,7 +91,7 @@ export function AdminPanel() {
     const pageIdx = getIdxById(id, pages);
     setPages((prev) => [...prev.slice(0, pageIdx), ...prev.slice(pageIdx + 1)]);
 
-    withTimeout(() => removePageOnServer(id));
+    removePageOnServer(id);
   };
 
   const onEditPage = (id, title) => {
@@ -196,11 +177,15 @@ export function AdminPanel() {
       let copy = [...pages];
 
       copy[sourcePageIdx].sections[source.index].sequence = destination.index;
-      console.log(destination.index);
 
       copy[sourcePageIdx].sections[source.index].page_id = Number(
         destination.droppableId
       );
+
+      console.log(destination.droppableId);
+      console.log(copy);
+      console.log(copy[destinationPageIdx]);
+      console.log(copy[destinationPageIdx].sections);
 
       copy[destinationPageIdx].sections.push(
         copy[sourcePageIdx].sections[source.index]
@@ -251,12 +236,6 @@ export function AdminPanel() {
     }
   };
 
-  const onStopTimer = () => {
-    clearTimeout(timeoutId);
-    setTimeoutId(null);
-    setPages(JSON.parse(window.localStorage.getItem("tempState")));
-  };
-
   let content =
     sectionId === null
       ? null
@@ -276,12 +255,6 @@ export function AdminPanel() {
 
   return (
     <div className="admin__panel">
-      {timeoutId ? (
-        <CancelNotification
-          onStopTimer={onStopTimer}
-          initTime={TIME_TO_DELETE}
-        />
-      ) : null}
       <PageList
         pages={pages}
         ulRef={ulRef}
@@ -293,6 +266,7 @@ export function AdminPanel() {
         onDragEnd={onDragEnd}
       />
       {form}
+      <Toaster position="bottom-right" />
     </div>
   );
 }
