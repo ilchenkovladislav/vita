@@ -1,0 +1,40 @@
+.header {
+  display: grid;
+  grid-template-columns: min-content;
+  justify-content: end;
+  padding: 20px;
+}
+
+.header__toggle .react-toggle-track {
+  height: 30px;
+  width: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.header__toggle .react-toggle-track-x,
+.header__toggle .react-toggle-track-check {
+  height: auto;
+  width: auto;
+  top: auto;
+  bottom: auto;
+}
+
+.header__toggle .react-toggle-thumb {
+  width: 30px;
+  height: 30px;
+}
+
+.header__toggle.react-toggle--checked .react-toggle-thumb {
+  border-color: #ccc;
+  left: 40px;
+}
+
+.header__toggle.react-toggle--checked .react-toggle-track {
+  background-color: #eee;
+}
+
+.header__toggle.react-toggle--checked:hover:not(.react-toggle--disabled)
+  .react-toggle-track {
+  background-color: #ccc;
+}
