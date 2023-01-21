@@ -37,7 +37,7 @@ export const UserPage = () => {
     });
   };
 
-  if (hasError) return <h1>Error: {errorMessage}</h1>;
+  if (hasError) return <h1>Кажется произошла ошибка: {errorMessage}</h1>;
   if (isLoading)
     return (
       <ContentLoader
@@ -57,21 +57,10 @@ export const UserPage = () => {
         <rect x="0" y="185" rx="3" ry="3" width="500" height="6" />
         <rect x="0" y="198" rx="3" ry="3" width="500" height="6" />
 
-        <rect x="0" y="223" rx="3" ry="3" width="500" height="300" />
-        <rect x="510" y="224" rx="3" ry="3" width="500" height="300" />
-        <rect x="510" y="530" rx="3" ry="3" width="500" height="300" />
-        <rect x="0" y="530" rx="3" ry="3" width="500" height="300" />
-
-        {/* <rect x="0" y="679" rx="3" ry="3" width="509" height="43" />
-
-        <rect x="0" y="756" rx="3" ry="3" width="328" height="21" />
-
-        <rect x="0" y="801" rx="3" ry="3" width="380" height="6" />
-        <rect x="0" y="814" rx="3" ry="3" width="380" height="6" />
-        <rect x="0" y="827" rx="3" ry="3" width="380" height="6" />
-
-        <rect x="0" y="852" rx="3" ry="3" width="256" height="197" />
-        <rect x="270" y="853" rx="3" ry="3" width="256" height="197" /> */}
+        <rect x="0" y="223" rx="3" ry="3" width="50%" height="500" />
+        <rect x="51%" y="224" rx="3" ry="3" width="50%" height="500" />
+        <rect x="51%" y="730" rx="3" ry="3" width="50%" height="500" />
+        <rect x="0" y="730" rx="3" ry="3" width="50%" height="500" />
       </ContentLoader>
     );
   if (data)
