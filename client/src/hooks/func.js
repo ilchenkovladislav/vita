@@ -55,8 +55,8 @@ export const addSectionOnServer = async (section, images) => {
     const result = await res.json();
 
     result.status
-      ? toast.success("Секция успешно удалена")
-      : toast.error("Произошла ошибка, секция не удалена");
+      ? toast.success("Секция успешно добавлена")
+      : toast.error("Произошла ошибка, секция не добавлена");
 
     return result.lastId;
   } catch (error) {
@@ -92,11 +92,11 @@ export const editSectionOnServer = async (section, images = null) => {
       body: form,
     });
 
-    const result = await res.text();
+    const result = await res.json();
 
     result.status
-      ? toast.success("Секция успешно удалена")
-      : toast.error("Произошла ошибка, секция не удалена");
+      ? toast.success("Секция успешно изменена")
+      : toast.error("Произошла ошибка, секция не изменена");
   } catch (error) {
     toast.error(`Произошла ошибка: ${error}`);
   }
@@ -116,8 +116,8 @@ export const addPageOnServer = async (title, link) => {
     const result = await response.json();
 
     result.status
-      ? toast.success("Секция успешно удалена")
-      : toast.error("Произошла ошибка, секция не удалена");
+      ? toast.success("Страница успешно добавлена")
+      : toast.error("Произошла ошибка, страница не добавлена");
 
     return result;
   } catch (error) {
@@ -132,11 +132,11 @@ export const removePageOnServer = async (id) => {
       body: id,
     });
 
-    const result = await response.text();
+    const result = await response.json();
 
     result.status
-      ? toast.success("Секция успешно удалена")
-      : toast.error("Произошла ошибка, секция не удалена");
+      ? toast.success("Страница успешно удалена")
+      : toast.error("Произошла ошибка, страница не удалена");
   } catch (error) {
     toast.error(`Произошла ошибка: ${error}`);
   }
@@ -152,8 +152,8 @@ export const editPageOnServer = async (id, title) => {
     const result = await response.json();
 
     result.status
-      ? toast.success("Секция успешно удалена")
-      : toast.error("Произошла ошибка, секция не удалена");
+      ? toast.success("Страница успешно изменена")
+      : toast.error("Произошла ошибка, страница не изменена");
 
     return result;
   } catch (error) {
