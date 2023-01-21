@@ -16,6 +16,18 @@ switch ($method) {
 
         $result = [];
 
+        // foreach ($pages as $page) {
+        //     $sql = "SELECT sections.id, title, comment, page_id, sections.sequence, pages_sections.id as dnd_id FROM pages_sections RIGHT JOIN sections ON sections.id = pages_sections.section_id WHERE pages_sections.page_id = :pageid";
+        //     $stmt = $db->prepare($sql);
+        //     $stmt->bindParam(':pageid', $page["id"]);
+        //     $stmt->execute();
+
+        //     $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //     $page["sections"] = $sections;
+        //     $result[] = $page;
+        // }
+
         foreach ($pages as $page) {
             $sql = "SELECT id, title, comment, page_id, sections.sequence FROM sections WHERE page_id = :pageid";
             $stmt = $db->prepare($sql);

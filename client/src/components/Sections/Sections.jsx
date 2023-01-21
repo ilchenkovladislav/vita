@@ -1,19 +1,15 @@
 import { Section } from "../Section/Section";
+import "./Sections.scss";
 
 import { Droppable } from "react-beautiful-dnd";
 
-export function Sections({
-  sections,
-  pageId,
-  onShowForm,
-  onRemoveSection,
-}) {
+export function Sections({ sections, pageId, onShowForm, onRemoveSection }) {
   return (
-    <Droppable droppableId={pageId.toString()} key={pageId.toString()}>
+    <Droppable droppableId={pageId.toString()}>
       {(provided) => (
         <ul
           ref={provided.innerRef}
-          className="section__list"
+          className="sections"
           {...provided.droppableProps}
         >
           {sections.map((section, idxSection) => (

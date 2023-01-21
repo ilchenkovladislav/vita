@@ -1,5 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Sections } from "../Sections/Sections";
+import "./PageItem.scss";
+
+import { HiOutlineDocumentAdd } from "react-icons/hi";
+import { CgTrashEmpty } from "react-icons/cg";
+import { TbExternalLink } from "react-icons/tb";
 
 export function PageItem({
   page,
@@ -49,7 +54,19 @@ export function PageItem({
       key={idx}
       className="page__item"
     >
-      {edit ? <FormEditTitle /> : <p onClick={() => setEdit(true)}>{title}</p>}
+      <div className="page__header">
+        {edit ? (
+          <FormEditTitle />
+        ) : (
+          <p className="page__title" onClick={() => setEdit(true)}>
+            {title}
+          </p>
+        )}
+
+        <a href={`http://localhost:3000/page/${link}`} rel="noreferrer" target="_blank">
+          <TbExternalLink />
+        </a>
+      </div>
 
       <Sections
         sections={sections}
@@ -58,12 +75,12 @@ export function PageItem({
         onRemoveSection={onRemoveSection}
       />
 
-      <button onClick={() => onShowForm(id)}>+</button>
-      <button onClick={onRemovePage}>-</button>
-
-      <a href={`http://localhost:3000/page/${link}`} target="_blank">
-        тп
-      </a>
+      <button onClick={() => onShowForm(id)}>
+        <HiOutlineDocumentAdd />
+      </button>
+      <button onClick={onRemovePage}>
+        <CgTrashEmpty />
+      </button>
     </li>
   );
 }

@@ -1,0 +1,30 @@
+.page__item {
+    border: 2px solid #eee;
+    border-radius: 5px;
+    padding: 30px;
+}
+
+.page__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page__title {
+    margin: 0;
+}
+
+.page__item button {
+    font-size: 14px;
+    border: none;
+    padding: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    color: #888;
+
+    &:hover {
+        background-color: #eee;
+        color: #222;
+    }
+}
