@@ -117,7 +117,19 @@ export function FormAdding({
 
   const formStyle = () => {
     let coords = getCoords(currentElement);
-    return { left: coords.right + 30, top: coords.top - 25 };
+    const marginX = 30;
+    const marginY = 25;
+
+    if (coords.right > 1300) {
+      const formWidth = 450;
+
+      return {
+        left: coords.left - marginX - formWidth,
+        top: coords.top - marginY,
+      };
+    }
+
+    return { left: coords.right + marginX, top: coords.top - marginY };
   };
 
   return (
