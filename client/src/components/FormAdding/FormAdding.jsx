@@ -17,14 +17,20 @@ export function FormAdding({
   content,
 }) {
   const [section, setSection] = useState({
-    title: "",
-    comment: "",
+    title: window.localStorage.getItem("title") ?? "",
+    comment: {},
     sequence: null,
     page_id: null,
   });
 
   const [images, setImages] = useState([]);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(
+    window.localStorage.getItem("comment")
+      ? EditorState.createWithContent(
+          convertFromRaw(JSON.parse(window.localStorage.getItem("comment")))
+        )
+      : EditorState.createEmpty()
+  );
 
   useEffect(() => {
     if (content) {
@@ -36,9 +42,10 @@ export function FormAdding({
         )
       );
     }
+
     return () => {
       setSection({
-        title: "",
+        title: window.localStorage.getItem("title") ?? "",
         comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
         sequence: null,
         page_id: null,
@@ -55,6 +62,8 @@ export function FormAdding({
       ...prevData,
       [name]: value,
     }));
+
+    window.localStorage.setItem("title", value);
   };
 
   const onEditorStateChange = (editorState) => {
@@ -63,6 +72,11 @@ export function FormAdding({
       ...prev,
       comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
     }));
+
+    window.localStorage.setItem(
+      "comment",
+      JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+    );
   };
 
   const onRemoveImage = (id) => {
@@ -73,6 +87,11 @@ export function FormAdding({
     setImages((prevImgs) => [...prevImgs, ...images]);
   };
 
+  const clearLocalStorage = () => {
+    window.localStorage.setItem("title", "");
+    window.localStorage.setItem("comment", "");
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     if (content) {
@@ -81,6 +100,7 @@ export function FormAdding({
       onAddSection(section, images);
     }
 
+    clearLocalStorage();
     onCloseForm();
   };
 
