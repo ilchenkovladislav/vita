@@ -1,17 +1,21 @@
 .admin__panel {
-    width: 1400px;
-    margin: auto;
+  width: 1400px;
+  margin: auto;
 }
 
 .page__add {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    font-size: 36px;
-    align-self: center;
-    cursor: pointer;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  font-size: 36px;
+  align-self: center;
+  border: 2px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  justify-self: center;
 
-    &:hover {
-        opacity: .6;
-    }
+  &:hover {
+    opacity: 0.6;
+  }
 }

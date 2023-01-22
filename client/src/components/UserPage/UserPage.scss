@@ -1,5 +1,28 @@
+.userpage__container {
+  width: 100%;
+
+  @media (max-width: 1319px) {
+    padding: 0 20px;
+  }
+
+  @media (min-width: 900px) {
+    margin: 0 auto;
+    max-width: 1280px;
+  }
+}
+
 .userpage {
-  padding: 50px 300px;
+  padding: 50px 0;
+
+  display: grid;
+  grid-template-rows: auto;
+  gap: 50px;
+}
+
+.userpage__section {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 30px;
 }
 
 .userpage h1 {
@@ -12,29 +35,27 @@
   margin: 0;
 }
 
-.userpage__section {
-    margin-top: 75px;
-}
-
 .userpage__img-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .userpage img {
-    display: block;
-    max-width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
+  display: block;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .userpage p {
-    margin: 0;
-    margin-top: 30px;
+  margin: 0;
 }

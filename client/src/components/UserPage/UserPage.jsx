@@ -65,9 +65,11 @@ export const UserPage = () => {
     );
   if (data)
     return (
-      <div className="userpage">
-        <h1>{data.title}</h1>
-        <RenderSections />
+      <div className="userpage__container">
+        <div className="userpage">
+          <h1>{data.title}</h1>
+          <RenderSections />
+        </div>
       </div>
     );
 };

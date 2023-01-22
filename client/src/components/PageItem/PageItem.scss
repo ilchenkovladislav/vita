@@ -1,7 +1,10 @@
 .page__item {
-    border: 2px solid #eee;
+    border: 2px solid var(--border-color);
     border-radius: 5px;
     padding: 30px;
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    gap: 20px;
 }
 
 .page__header {
@@ -17,6 +20,7 @@
 .page__item button {
     font-size: 14px;
     border: none;
+    border-radius: 3px;
     padding: 5px;
     background-color: transparent;
     cursor: pointer;

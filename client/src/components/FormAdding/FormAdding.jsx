@@ -132,7 +132,7 @@ export function FormAdding({
         style={formStyle()}
       >
         <div>
-          <label htmlFor="title">Заголовок</label>
+          <label htmlFor="title">заголовок</label>
           <input
             type="text"
             name="title"
@@ -142,7 +142,7 @@ export function FormAdding({
           />
         </div>
         <div>
-          <label>Фотки:</label>
+          <label>фотографии</label>
           <Dropzone
             images={images}
             onRemoveImg={onRemoveImage}
@@ -150,14 +150,14 @@ export function FormAdding({
           />
         </div>
         <div>
-          <label htmlFor="comment">Комментарии:</label>
+          <label htmlFor="comment">комментарии</label>
           <Editor
             editorState={editorState}
             onEditorStateChange={onEditorStateChange}
           />
         </div>
         <button className="formAdding__btn" type="submit">
-          Добавить секцию
+          добавить секцию
         </button>
       </form>
     </div>

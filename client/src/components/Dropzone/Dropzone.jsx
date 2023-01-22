@@ -46,7 +46,7 @@ export default function Dropzone({ onUpdateImages, images, onRemoveImg }) {
     <section className="container">
       <div {...getRootProps({ className: "dropzone" })}>
         <input name="images" {...getInputProps()} />
-        <p>Перетащите файлы сюда, или кликните для выбора файлов</p>
+        <p>перетащите фото сюда или кликните для выбора</p>
       </div>
       <aside className="thumbsContainer">{thumbs}</aside>
     </section>

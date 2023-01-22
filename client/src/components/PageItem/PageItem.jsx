@@ -63,7 +63,11 @@ export function PageItem({
           </p>
         )}
 
-        <a href={`http://localhost:3000/page/${link}`} rel="noreferrer" target="_blank">
+        <a
+          href={`http://localhost:3000/page/${link}`}
+          rel="noreferrer"
+          target="_blank"
+        >
           <TbExternalLink />
         </a>
       </div>
@@ -75,12 +79,14 @@ export function PageItem({
         onRemoveSection={onRemoveSection}
       />
 
-      <button onClick={() => onShowForm(id)}>
-        <HiOutlineDocumentAdd />
-      </button>
-      <button onClick={onRemovePage}>
-        <CgTrashEmpty />
-      </button>
+      <div className="page__btns">
+        <button onClick={() => onShowForm(id)}>
+          <HiOutlineDocumentAdd />
+        </button>
+        <button onClick={onRemovePage}>
+          <CgTrashEmpty />
+        </button>
+      </div>
     </li>
   );
 }
