@@ -16,13 +16,6 @@ export function FormAdding({
   onCloseForm,
   content,
 }) {
-  const [section, setSection] = useState({
-    title: window.localStorage.getItem("title") ?? "",
-    comment: {},
-    sequence: null,
-    page_id: null,
-  });
-
   const [images, setImages] = useState([]);
   const [editorState, setEditorState] = useState(
     window.localStorage.getItem("comment")
@@ -31,6 +24,13 @@ export function FormAdding({
         )
       : EditorState.createEmpty()
   );
+
+  const [section, setSection] = useState({
+    title: window.localStorage.getItem("title") ?? "",
+    comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+    sequence: null,
+    page_id: null,
+  });
 
   useEffect(() => {
     if (content) {
