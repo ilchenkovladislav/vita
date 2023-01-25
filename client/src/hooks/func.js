@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 
-const _websiteBase = "http://vita/server";
+export const _websiteBase = "http://www.s595099.smrtp.ru/server";
+// export const _websiteBase = "http://vita/server";
 
 export const getPages = async () => {
   try {

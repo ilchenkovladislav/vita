@@ -4,6 +4,7 @@ import { Parser } from "html-to-react";
 import { SkeletonLoader } from "../SkeletonLoader/SkeletonLoader";
 
 import { useFetch } from "../../hooks/useFetch";
+import { _websiteBase } from "../../hooks/func";
 
 import "./UserPage.scss";
 
@@ -11,7 +12,7 @@ export const UserPage = () => {
   const { href } = useParams();
 
   const { data, isLoading, hasError, errorMessage } = useFetch(
-    `http://vita/server/page.php`,
+    `${_websiteBase}/page.php`,
     { link: href }
   );
 
