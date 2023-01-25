@@ -4,6 +4,7 @@ import { FormAdding } from "../FormAdding/FormAdding";
 import { PageList } from "../PageList/PageList";
 import "./AdminPanel.scss";
 import { Toaster } from "react-hot-toast";
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   getPages,
@@ -76,7 +77,7 @@ export function AdminPanel() {
 
   const onAddPage = () => {
     const title = "Новая страница";
-    const link = crypto.randomUUID();
+    const link = uuidv4();
     addPageOnServer(title, link).then((res) =>
       setPages((prev) => [
         ...prev,
