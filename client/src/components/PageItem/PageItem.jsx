@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Sections } from "../Sections/Sections";
 import "./PageItem.scss";
 
@@ -16,9 +16,8 @@ export function PageItem({
   idx,
 }) {
   const { id, sections, title, link } = page;
-  const [edit, setEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState("");
-  const inputRef = useRef();
 
   useEffect(() => {
     setInput(title);
@@ -26,7 +25,7 @@ export function PageItem({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setEdit(false);
+    setIsEdit(false);
     onEditPage(id, input);
   };
 
@@ -37,14 +36,18 @@ export function PageItem({
   const FormEditTitle = () => {
     return (
       <form onSubmit={onSubmit}>
-        <input
-          ref={inputRef}
-          type="text"
-          onChange={onChangeInput}
-          value={input}
-          autoFocus
-        />
+        <input type="text" onChange={onChangeInput} value={input} autoFocus />
       </form>
+    );
+  };
+
+  const Title = () => {
+    if (isEdit) return <FormEditTitle />;
+
+    return (
+      <p className="page__title" onClick={() => setIsEdit(true)}>
+        {title}
+      </p>
     );
   };
 
@@ -55,15 +58,10 @@ export function PageItem({
       className="page__item"
     >
       <div className="page__header">
-        {edit ? (
-          <FormEditTitle />
-        ) : (
-          <p className="page__title" onClick={() => setEdit(true)}>
-            {title}
-          </p>
-        )}
+        <Title />
 
         <a
+          // href={`http://www.s595099.smrtp.ru/page/${link}`}
           href={`http://localhost:3000/page/${link}`}
           rel="noreferrer"
           target="_blank"
