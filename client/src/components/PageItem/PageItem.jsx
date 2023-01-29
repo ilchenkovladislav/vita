@@ -1,32 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Sections } from "../Sections/Sections";
-import "./PageItem.scss";
+import React, { useState } from "react";
 
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { CgTrashEmpty } from "react-icons/cg";
 import { TbExternalLink } from "react-icons/tb";
 
+import { Sections } from "../Sections/Sections";
+import "./PageItem.scss";
+
 export function PageItem({
-  page,
+  page: { id, sections, title, link },
   onShowForm,
-  onRemoveSection,
+  onDeleteSection,
   onRemovePage,
   onEditPage,
-  ulRef,
-  idx,
 }) {
-  const { id, sections, title, link } = page;
-  const [edit, setEdit] = useState(false);
-  const [input, setInput] = useState("");
-  const inputRef = useRef();
-
-  useEffect(() => {
-    setInput(title);
-  }, [title]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [input, setInput] = useState(title);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setEdit(false);
+    setIsEdit(false);
     onEditPage(id, input);
   };
 
@@ -37,33 +30,25 @@ export function PageItem({
   const FormEditTitle = () => {
     return (
       <form onSubmit={onSubmit}>
-        <input
-          ref={inputRef}
-          type="text"
-          onChange={onChangeInput}
-          value={input}
-          autoFocus
-        />
+        <input type="text" onChange={onChangeInput} value={input} autoFocus />
       </form>
     );
   };
 
-  return (
-    <li
-      ref={(el) => (ulRef.current[idx] = el)}
-      key={idx}
-      className="page__item"
-    >
-      <div className="page__header">
-        {edit ? (
-          <FormEditTitle />
-        ) : (
-          <p className="page__title" onClick={() => setEdit(true)}>
-            {title}
-          </p>
-        )}
+  const Title = () => {
+    return (
+      <p className="page__title" onClick={() => setIsEdit(true)}>
+        {title}
+      </p>
+    );
+  };
 
+  return (
+    <>
+      <div className="page__header">
+        {isEdit ? <FormEditTitle /> : <Title />}
         <a
+          // href={`http://www.s595099.smrtp.ru/page/${link}`}
           href={`http://localhost:3000/page/${link}`}
           rel="noreferrer"
           target="_blank"
@@ -76,7 +61,7 @@ export function PageItem({
         sections={sections}
         pageId={id}
         onShowForm={onShowForm}
-        onRemoveSection={onRemoveSection}
+        onDeleteSection={onDeleteSection}
       />
 
       <div className="page__btns">
@@ -87,6 +72,6 @@ export function PageItem({
           <CgTrashEmpty />
         </button>
       </div>
-    </li>
+    </>
   );
 }

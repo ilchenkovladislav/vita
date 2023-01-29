@@ -1,7 +1,17 @@
 .sections {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sections__item {
+  display: grid;
+  grid-template-columns: 1fr min-content min-content;
+  padding: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  align-items: center;
+  background-color: var(--background-color);
 }

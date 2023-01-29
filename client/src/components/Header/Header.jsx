@@ -1,9 +1,10 @@
-import "./Header.scss";
-import { ThemeContext, themes } from "../../contexts/ThemeContext";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import { BsFillSunFill } from "react-icons/bs";
 import { BsFillMoonFill } from "react-icons/bs";
+
+import { ThemeContext, themes } from "../../contexts/ThemeContext";
+import "./Header.scss";
 
 export const Header = () => {
   return (

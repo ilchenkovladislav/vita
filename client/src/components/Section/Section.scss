@@ -1,29 +1,19 @@
-.section {
-    display: grid;
-    grid-template-columns: 1fr min-content min-content;
-    padding: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    align-items: center;
-    background-color: var(--background-color);
-}
-
 .section__title {
-    margin: 0;
+  margin: 0;
 }
 
 .section button {
-    font-size: 14px;
-    border: none;
-    border-radius: 3px;
-    padding: 5px;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all .2s;
-    color: #888;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #888;
 
-    &:hover {
-        background-color: #eee;
-        color: #222;
-    }
+  &:hover {
+    background-color: #eee;
+    color: #222;
+  }
 }

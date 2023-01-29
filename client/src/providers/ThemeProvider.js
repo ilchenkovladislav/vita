@@ -11,7 +11,7 @@ const getTheme = () => {
   return themes.dark;
 };
 
-const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(getTheme);
 
   useEffect(() => {
@@ -25,5 +25,3 @@ const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeProvider;
