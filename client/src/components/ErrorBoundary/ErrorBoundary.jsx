@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./ErrorBoundary.scss";
+
 export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -13,14 +15,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <h1
-          style={{
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <h1 className="errorboundary__title">
           Что-то пошло не так. {this.state.errorText}
         </h1>
       );

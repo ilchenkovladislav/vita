@@ -1,7 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
+require_once("headers.php");
 require("DbConnect.php");
 
 $conn = new DbConnect;
@@ -19,27 +17,72 @@ function executeSql($stmt)
     return $response;
 }
 
+function selectPageByLink($db, $link)
+{
+    $sql = "SELECT * FROM pages WHERE link = :link";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':link', $link);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function selectPageSections($db, $page)
+{
+    $sql = "SELECT id, title, comment, page_id, sections.sequence FROM sections WHERE page_id = :pageid";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':pageid', $page["id"]);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function selectSectionImages($db, $section)
+{
+    $sql = "SELECT id, img FROM images WHERE section_id = :section_id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':section_id', $section["id"]);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function insertIntoPage($db, $page)
+{
+    $sql = "INSERT INTO pages(id, title, link) values(null, :title, :link)";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':title', $page->title);
+    $stmt->bindParam(':link', $page->link);
+
+    return executeSql($stmt);
+}
+
+function updatePage($db, $page)
+{
+    $sql = "UPDATE pages SET title= :title WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $page->pageId);
+    $stmt->bindParam(':title', $page->title);
+
+    return executeSql($stmt);
+}
+
+function deletePage($db, $id)
+{
+    $sql = "DELETE FROM pages WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+
+    return executeSql($stmt);
+}
+
 switch ($method) {
     case "GET":
-        $sql = "SELECT * FROM pages WHERE link = :link";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':link', $_GET["link"]);
-        $stmt->execute();
-        $page = $stmt->fetch(PDO::FETCH_ASSOC);
+        $link = $_GET["link"];
 
-        $sql = "SELECT id, title, comment, page_id, sections.sequence FROM sections WHERE page_id = :pageid";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':pageid', $page["id"]);
-        $stmt->execute();
-        $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $page["sections"] = $sections;
+        $page = selectPageByLink($db, $link);
+
+        $page["sections"] = selectPageSections($db, $page);
 
         for ($i = 0; $i < count($page["sections"]); $i++) {
-            $sql = "SELECT id, img FROM images WHERE section_id = :section_id";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(':section_id', $page["sections"][$i]["id"]);
-            $stmt->execute();
-            $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $images = selectSectionImages($db, $page["sections"][$i]);
 
             for ($j = 0; $j < count($images); $j++) {
                 $images[$j]["img"] = base64_encode($images[$j]["img"]);
@@ -51,36 +94,27 @@ switch ($method) {
         echo json_encode($page);
         break;
     case "POST":
-        if (isset($_POST["title"])) {
-            $sql = "INSERT INTO pages(id, title, link) values(null, :title, :link)";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(':title', $_POST["title"]);
-            $stmt->bindParam(':link', $_POST["link"]);
+        $page = json_decode(file_get_contents('php://input'));
 
-            $response = executeSql($stmt);
-        }
+        $response = insertIntoPage($db, $page);
 
         $lastId = $db->lastInsertId();
-        $response = ['status' => 1, 'lastId' => $lastId];
+        $response["lastId"] = $lastId;
+
         echo json_encode($response);
         break;
     case "PUT":
         $page = json_decode(file_get_contents('php://input'));
-        $sql = "UPDATE pages SET title= :title WHERE id = :id";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':id', $page->id);
-        $stmt->bindParam(':title', $page->title);
 
-        $response = executeSql($stmt);
+        $response = updatePage($db, $page);
+
         echo json_encode($response);
         break;
     case "DELETE":
         $id = json_decode(file_get_contents('php://input'));
-        $sql = "DELETE FROM pages WHERE id = :id";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':id', $id);
 
-        $response = executeSql($stmt);
+        $response = deletePage($db, $id);
+
         echo json_encode($response);
         break;
 }

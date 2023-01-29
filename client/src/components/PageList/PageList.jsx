@@ -1,36 +1,40 @@
 import React from "react";
-import { PageItem } from "../PageItem/PageItem";
+
 import { DragDropContext } from "react-beautiful-dnd";
 
+import { PageItem } from "../PageItem/PageItem";
 import "./PageList.scss";
 
 export function PageList({
   pages,
   ulRef,
   onShowForm,
-  onRemoveSection,
+  onDeleteSection,
   onRemovePage,
   onEditPage,
   onAddPage,
-  onDragEnd
+  onDragEnd,
 }) {
+  const elements = pages.map((page, idx) => (
+    <li
+      ref={(el) => (ulRef.current[idx] = el)}
+      key={page.id}
+      className="page__item"
+    >
+      <PageItem
+        page={page}
+        onShowForm={onShowForm}
+        onDeleteSection={onDeleteSection}
+        onRemovePage={() => onRemovePage(page.id)}
+        onEditPage={onEditPage}
+      />
+    </li>
+  ));
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <ul className="page__list">
-        {pages.map((page, idx) => (
-          <PageItem
-            idx={idx}
-            ulRef={ulRef}
-            key={page.id}
-            page={page}
-            onShowForm={onShowForm}
-            onRemoveSection={onRemoveSection}
-            onRemovePage={() => onRemovePage(page.id)}
-            onEditPage={onEditPage}
-          />
-        ))}
-
+        {elements}
         <button onClick={onAddPage} className="page__add">
           +
         </button>

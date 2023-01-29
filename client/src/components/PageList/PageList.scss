@@ -1,8 +1,17 @@
 .page__list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    align-content: center;
-    padding: 150px 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  align-content: center;
+  padding: 150px 0;
+}
+
+.page__item {
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  padding: 30px;
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  gap: 20px;
 }

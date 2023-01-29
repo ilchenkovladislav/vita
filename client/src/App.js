@@ -1,16 +1,16 @@
 import React from "react";
-import { AdminPanel } from "./components/AdminPanel/AdminPanel";
-import { UserPage } from "./components/UserPage/UserPage";
-import { Header } from "./components/Header/Header";
-import ThemeProvider from "./providers/ThemeProvider";
-import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
-import "./App.scss";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
+import { ThemeProvider } from "./providers/ThemeProvider";
+import { Header } from "./components/Header/Header";
+import { AdminPanel } from "./pages/AdminPanel/AdminPanel";
+import { UserPage } from "./pages/UserPage/UserPage";
+import "./App.scss";
 
 function App() {
   return (
-    <div style={{ position: "relative" }} className="App">
+    <div className="app">
       <ErrorBoundary>
         <ThemeProvider>
           <Header />

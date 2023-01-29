@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
 import draftToHtml from "draftjs-to-html";
 import { Parser } from "html-to-react";
-import { SkeletonLoader } from "../SkeletonLoader/SkeletonLoader";
+import { SkeletonLoader } from "../../components/SkeletonLoader/SkeletonLoader";
 
 import { useFetch } from "../../hooks/useFetch";
-import { _websiteBase } from "../../hooks/func";
+import API from "../../services/API";
 
 import "./UserPage.scss";
 
@@ -12,11 +12,11 @@ export const UserPage = () => {
   const { href } = useParams();
 
   const { data, isLoading, hasError, errorMessage } = useFetch(
-    `${_websiteBase}/page.php`,
+    `${API._websiteBase}/page.php`,
     { link: href }
   );
 
-  const RenderSections = () => {
+  const renderSections = () => {
     data.sections.sort((a, b) => a.sequence - b.sequence);
 
     return data.sections.map(({ title, imgs, comment }) => {
@@ -45,7 +45,7 @@ export const UserPage = () => {
       <div className="userpage__container">
         <div className="userpage">
           <h1>{data.title}</h1>
-          <RenderSections />
+          {renderSections()}
         </div>
       </div>
     );

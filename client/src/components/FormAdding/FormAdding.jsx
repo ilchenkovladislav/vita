@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import Dropzone from "../Dropzone/Dropzone";
+import React, { useState, useEffect } from "react";
+
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-
-import "./FormAdding.scss";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-import { getImages } from "../../hooks/func";
+import API from "../../services/API";
+import Dropzone from "../Dropzone/Dropzone";
+import "./FormAdding.scss";
 
 export function FormAdding({
   currentElement,
@@ -17,6 +16,7 @@ export function FormAdding({
   content,
 }) {
   const [images, setImages] = useState([]);
+
   const [editorState, setEditorState] = useState(
     window.localStorage.getItem("comment")
       ? EditorState.createWithContent(
@@ -29,38 +29,29 @@ export function FormAdding({
     title: window.localStorage.getItem("title") ?? "",
     comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
     sequence: null,
-    page_id: null,
+    pageId: null,
   });
 
   useEffect(() => {
-    if (content) {
-      setSection(content);
-      getImages(content.id).then((images) => setImages(images));
-      setEditorState(
-        EditorState.createWithContent(
-          convertFromRaw(JSON.parse(content.comment))
-        )
-      );
+    if (!content) {
+      return;
     }
 
-    return () => {
-      setSection({
-        title: window.localStorage.getItem("title") ?? "",
-        comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-        sequence: null,
-        page_id: null,
-      });
+    setSection(content);
 
-      setImages([]);
-    };
+    setEditorState(
+      EditorState.createWithContent(convertFromRaw(JSON.parse(content.comment)))
+    );
+
+    API.getImages(content.id).then((images) => setImages(images));
   }, [content]);
 
   const inputHandler = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
     setSection((prevData) => ({
       ...prevData,
-      [name]: value,
+      title: value,
     }));
 
     window.localStorage.setItem("title", value);
@@ -68,19 +59,20 @@ export function FormAdding({
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
-    setSection((prev) => ({
-      ...prev,
-      comment: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-    }));
 
-    window.localStorage.setItem(
-      "comment",
-      JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+    const comment = JSON.stringify(
+      convertToRaw(editorState.getCurrentContent())
     );
+
+    setSection((prev) => {
+      return { ...prev, comment };
+    });
+
+    window.localStorage.setItem("comment", comment);
   };
 
-  const onRemoveImage = (id) => {
-    setImages([...images.slice(0, id), ...images.slice(id + 1)]);
+  const onRemoveImage = (idx) => {
+    setImages([...images.slice(0, idx), ...images.slice(idx + 1)]);
   };
 
   const onUpdateImages = (images) => {
@@ -94,6 +86,7 @@ export function FormAdding({
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     if (content) {
       onEditSection(section, images);
     } else {
@@ -135,8 +128,6 @@ export function FormAdding({
   return (
     <div className="form__back" onClick={onCloseForm}>
       <form
-        action="http://vita/server/"
-        method="post"
         encType="multipart/form-data"
         className="formAdding"
         onSubmit={onSubmit}
@@ -147,10 +138,10 @@ export function FormAdding({
           <label htmlFor="title">заголовок</label>
           <input
             type="text"
-            name="title"
             id="title"
             value={section.title}
             onChange={inputHandler}
+            autoFocus={!content}
           />
         </div>
         <div>
@@ -168,8 +159,8 @@ export function FormAdding({
             onEditorStateChange={onEditorStateChange}
           />
         </div>
-        <button className="formAdding__btn" type="submit">
-          добавить секцию
+        <button onClick={onSubmit} className="formAdding__btn" type="submit">
+          сохранить
         </button>
       </form>
     </div>
