@@ -1,9 +1,22 @@
-* {
-    font-family: Arial, Helvetica, sans-serif;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-size: 24px;
+    font-family: 'Roboto', Helvetica, sans-serif;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .app {
-    position: 'relative';
+    position: relative;
 }
 
 .container {
