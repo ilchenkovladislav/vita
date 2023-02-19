@@ -4,7 +4,7 @@ import './SkeletonLoader.scss';
 
 export const SkeletonLoader = () => {
     return (
-        <div className="userpage__container">
+        <div className="container">
             <ContentLoader
                 speed={2}
                 backgroundColor="#b5b5b5"

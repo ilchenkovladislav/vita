@@ -1,14 +1,7 @@
 .header {
     display: grid;
-    max-width: 1400px;
     justify-content: end;
     padding: 20px 0;
-    margin: auto;
-}
-
-.header__toggle {
-    display: flex;
-    align-items: center;
 }
 
 .header__toggle .react-toggle-track {
