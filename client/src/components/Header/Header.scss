@@ -13,10 +13,11 @@
 
 .header__toggle .react-toggle-track-x,
 .header__toggle .react-toggle-track-check {
+    height: auto;
+    width: auto;
     top: auto;
     bottom: auto;
-    width: auto;
-    height: auto;
+    font-size: 18px;
 }
 
 .header__toggle .react-toggle-track-x svg {
