@@ -1,10 +1,18 @@
 .page__list {
+    list-style: none;
     display: grid;
+    gap: 30px;
     align-content: center;
     padding: 0;
-    gap: 30px;
-    grid-template-columns: repeat(auto-fill, 440px);
-    list-style: none;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1200px) {
+        padding: 100px 0;
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .page__item {
