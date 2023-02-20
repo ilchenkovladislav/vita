@@ -1,6 +1,18 @@
 .errorboundary__title {
-    display: 'flex';
-    height: '100vh';
-    align-items: 'center';
-    justify-content: 'center';
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 16px;
+
+    @media (min-width: 768px) {
+        padding: 0 100px;
+        font-size: 24px;
+    }
+
+    @media (min-width: 1200px) {
+        padding: 0 400px;
+        font-size: 40px;
+    }
 }
