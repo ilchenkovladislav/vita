@@ -13,6 +13,7 @@
   --link-color: blue;
   --link-color-visited: purple;
   --border-color: #eee;
+  --bg-active-color: rgb(219, 244, 252);
 }
 
 :root[data-theme="dark"] {
@@ -21,6 +22,7 @@
   --link-color: lightblue;
   --link-color-visited: lightseagreen;
   --border-color: #333;
+  --bg-active-color: rgb(84, 94, 97);
 }
 
 body {

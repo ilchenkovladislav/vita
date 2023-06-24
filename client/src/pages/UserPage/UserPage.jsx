@@ -1,20 +1,29 @@
+import { useContext, useEffect } from "react";
+
 import { useParams } from "react-router-dom";
 import draftToHtml from "draftjs-to-html";
 import { Parser } from "html-to-react";
 import { SkeletonLoader } from "../../components/SkeletonLoader/SkeletonLoader";
 
 import { useFetch } from "../../hooks/useFetch";
+import { ThemeContext, themes } from "../../contexts/ThemeContext";
 import API from "../../services/API";
 
 import "./UserPage.scss";
 
 export const UserPage = () => {
   const { href } = useParams();
+  const { setTheme } = useContext(ThemeContext);
 
   const { data, isLoading, hasError, errorMessage } = useFetch(
     `${API._websiteBase}/page.php`,
     { link: href }
   );
+
+  useEffect(() => {
+    if (!data?.theme) return;
+    setTheme(data.theme);
+  }, [setTheme, data]);
 
   const renderSections = () => {
     data.sections.sort((a, b) => a.sequence - b.sequence);

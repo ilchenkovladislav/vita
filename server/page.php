@@ -26,6 +26,15 @@ function selectPageByLink($db, $link)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getPageTheme($db, $pageId)
+{
+    $sql = "SELECT * FROM settings WHERE page_id = :page_id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':page_id', $pageId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function selectPageSections($db, $page)
 {
     $sql = "SELECT id, title, comment, page_id, sections.sequence FROM sections WHERE page_id = :pageid";
@@ -73,6 +82,15 @@ function deletePage($db, $id)
     return executeSql($stmt);
 }
 
+function insertIntoSettings($db, $pageId)
+{
+    $sql = "INSERT INTO settings(id, theme, page_id) values(null, null, :page_id)";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':page_id', $pageId);
+
+    return executeSql($stmt);
+}
+
 switch ($method) {
     case "GET":
         $link = $_GET["link"];
@@ -91,6 +109,8 @@ switch ($method) {
             $page["sections"][$i]["imgs"] = $images;
         }
 
+        $page["theme"] = getPageTheme($db, $page["id"])["theme"];
+
         echo json_encode($page);
         break;
     case "POST":
@@ -99,6 +119,7 @@ switch ($method) {
         $response = insertIntoPage($db, $page);
 
         $lastId = $db->lastInsertId();
+        insertIntoSettings($db, $lastId);
         $response["lastId"] = $lastId;
 
         echo json_encode($response);

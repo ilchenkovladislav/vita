@@ -1,0 +1,32 @@
+.pageSettings {
+  position: absolute;
+  background-color: var(--background-color);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.pageSettings__bg-colors {
+  display: grid;
+}
+
+.pageSettings__title {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.pageSettings__item {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid var(--border-color);
+  margin-top: 5px;
+}
+
+.pageSettings__item--checked {
+  background-color: var(--bg-active-color);
+}

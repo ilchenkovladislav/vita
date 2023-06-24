@@ -5,6 +5,7 @@ import { CgTrashEmpty } from "react-icons/cg";
 import { TbExternalLink } from "react-icons/tb";
 
 import { Sections } from "../Sections/Sections";
+import { PageSettings } from "../PageSettings/PageSettings";
 import "./PageItem.scss";
 
 export function PageItem({
@@ -47,11 +48,13 @@ export function PageItem({
     <>
       <div className="page__header">
         {isEdit ? <FormEditTitle /> : <Title />}
+        <PageSettings pageId={id} />
         <a
-          // href={`http://www.s595099.smrtp.ru/page/${link}`}
-          href={`http://localhost:3000/page/${link}`}
+          // href={`http://localhost:3000/page/${link}`}
+          href={`https://vita-photofilm.ru/page/${link}`}
           rel="noreferrer"
           target="_blank"
+          className="page__link"
         >
           <TbExternalLink />
         </a>

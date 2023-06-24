@@ -3,17 +3,18 @@ import React, { useState, useEffect } from "react";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Dialog } from "@headlessui/react";
 
 import API from "../../services/API";
 import Dropzone from "../Dropzone/Dropzone";
 import "./FormAdding.scss";
 
 export function FormAdding({
-  currentElement,
   onAddSection,
   onEditSection,
   onCloseForm,
   content,
+  show,
 }) {
   const [images, setImages] = useState([]);
 
@@ -97,72 +98,51 @@ export function FormAdding({
     onCloseForm();
   };
 
-  const getCoords = (elem) => {
-    let box = elem.getBoundingClientRect();
-
-    return {
-      top: box.top + window.pageYOffset,
-      right: box.right + window.pageXOffset,
-      bottom: box.bottom + window.pageYOffset,
-      left: box.left + window.pageXOffset,
-    };
-  };
-
-  const formStyle = () => {
-    let coords = getCoords(currentElement);
-    const marginX = 30;
-    const marginY = 25;
-
-    if (coords.right > 1300) {
-      const formWidth = 450;
-
-      return {
-        left: coords.left - marginX - formWidth,
-        top: coords.top - marginY,
-      };
-    }
-
-    return { left: coords.right + marginX, top: coords.top - marginY };
-  };
-
   return (
-    <div className="form__back" onClick={onCloseForm}>
-      <form
-        encType="multipart/form-data"
-        className="formAdding"
-        onSubmit={onSubmit}
-        onClick={(e) => e.stopPropagation()}
-        style={formStyle()}
-      >
-        <div>
-          <label htmlFor="title">заголовок</label>
-          <input
-            type="text"
-            id="title"
-            value={section.title}
-            onChange={inputHandler}
-            autoFocus={!content}
-          />
-        </div>
-        <div>
-          <label>фотографии</label>
-          <Dropzone
-            images={images}
-            onRemoveImg={onRemoveImage}
-            onUpdateImages={onUpdateImages}
-          />
-        </div>
-        <div>
-          <label htmlFor="comment">комментарии</label>
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={onEditorStateChange}
-          />
-        </div>
-        <button onClick={onSubmit} className="formAdding__btn" type="submit">
-          сохранить
-        </button>
-      </form>
-    </div>
+    <Dialog open={show} onClose={onCloseForm}>
+      <div className="form__back" aria-hidden="true" />
+      <div className="form__container">
+        <Dialog.Panel className="form__panel">
+          <form
+            encType="multipart/form-data"
+            className="formAdding"
+            onSubmit={onSubmit}
+          >
+            <div className="formAdding__title">
+              <label htmlFor="title">заголовок</label>
+              <input
+                type="text"
+                id="title"
+                value={section.title}
+                onChange={inputHandler}
+                autoFocus={!content}
+              />
+            </div>
+            <div className="formAdding__photo">
+              <label>фотографии</label>
+              <Dropzone
+                images={images}
+                onRemoveImg={onRemoveImage}
+                onUpdateImages={onUpdateImages}
+              />
+            </div>
+            <div className="formAdding__comment">
+              <label htmlFor="comment">комментарии</label>
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </div>
+            <button
+              onClick={onSubmit}
+              className="formAdding__btn"
+              type="submit"
+            >
+              сохранить
+            </button>
+          </form>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
   );
 }

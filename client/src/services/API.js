@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
 
 class API {
-  // _websiteBase = "http://www.s595099.smrtp.ru/server";
-  _websiteBase = "http://vita/server";
+  // _websiteBase = "http://vita/server";
+  _websiteBase = "https://vita-photofilm.ru/server";
 
   getPages = async () => {
     try {
@@ -188,6 +188,36 @@ class API {
       result.status
         ? toast.success("Страница успешно удалена")
         : toast.error("Произошла ошибка, страница не удалена");
+    } catch (error) {
+      toast.error(`Произошла ошибка: ${error}`);
+    }
+  };
+
+  getPageTheme = async (pageId) => {
+    try {
+      const response = await fetch(
+        `${this._websiteBase}/settings.php?pageId=${pageId}`
+      );
+      const theme = await response.json();
+
+      return theme;
+    } catch (error) {
+      toast.error(`Произошла ошибка: ${error}`);
+    }
+  };
+
+  setPageSettings = async (pageId, settings) => {
+    try {
+      const response = await fetch(`${this._websiteBase}/settings.php`, {
+        method: "POST",
+        body: JSON.stringify({ pageId, settings }),
+      });
+
+      const result = await response.json();
+
+      result.status
+        ? toast.success("Настройки успешно сохранены")
+        : toast.error("Произошла ошибка");
     } catch (error) {
       toast.error(`Произошла ошибка: ${error}`);
     }

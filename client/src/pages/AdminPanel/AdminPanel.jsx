@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Toaster } from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
@@ -12,17 +12,12 @@ import API from "../../services/API";
 export function AdminPanel() {
   const [pages, setPages] = useState([]);
   const { show, pageId, sectionId, onShowForm, onCloseForm } = useForm();
-  const ulRef = useRef([]);
 
   useEffect(() => {
     API.getPages().then((pages) => {
       setPages(pages);
     });
   }, []);
-
-  useEffect(() => {
-    ulRef.current = ulRef.current.slice(0, pages.length);
-  }, [pages]);
 
   const onAddSection = (section, images) => {
     const pageIdx = pages.findIndex((p) => p.id === pageId);
@@ -242,21 +237,10 @@ export function AdminPanel() {
     content = pages[pageIdx].sections[sectionIdx];
   }
 
-  const form = show ? (
-    <FormAdding
-      currentElement={ulRef.current[pages.findIndex((p) => p.id === pageId)]}
-      onCloseForm={onCloseForm}
-      onAddSection={onAddSection}
-      onEditSection={onEditSection}
-      content={content}
-    />
-  ) : null;
-
   return (
     <div className="admin__panel">
       <PageList
         pages={pages}
-        ulRef={ulRef}
         onShowForm={onShowForm}
         onDeleteSection={onDeleteSection}
         onRemovePage={onRemovePage}
@@ -264,7 +248,13 @@ export function AdminPanel() {
         onAddPage={onAddPage}
         onDragEnd={onDragEnd}
       />
-      {form}
+      <FormAdding
+        onCloseForm={onCloseForm}
+        onAddSection={onAddSection}
+        onEditSection={onEditSection}
+        content={content}
+        show={show}
+      />
       <Toaster position="bottom-right" />
     </div>
   );

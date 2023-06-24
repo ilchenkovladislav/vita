@@ -9,8 +9,8 @@
 .sections__item {
   display: grid;
   grid-template-columns: 1fr min-content min-content;
-  padding: 10px 0;
   padding: 10px;
+  padding-right: 0;
   border-radius: 5px;
   align-items: center;
   background-color: var(--background-color);

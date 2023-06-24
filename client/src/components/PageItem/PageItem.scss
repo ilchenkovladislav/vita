@@ -1,11 +1,16 @@
 .page__header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 30px 30px;
+  // justify-content: space-between;
   align-items: center;
 }
 
 .page__title {
   margin: 0;
+}
+
+.page__link {
+  text-align: center;
 }
 
 .page__item button {

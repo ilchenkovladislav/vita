@@ -7,7 +7,6 @@ import "./PageList.scss";
 
 export function PageList({
   pages,
-  ulRef,
   onShowForm,
   onDeleteSection,
   onRemovePage,
@@ -16,11 +15,7 @@ export function PageList({
   onDragEnd,
 }) {
   const elements = pages.map((page, idx) => (
-    <li
-      ref={(el) => (ulRef.current[idx] = el)}
-      key={page.id}
-      className="page__item"
-    >
+    <li key={page.id} className="page__item">
       <PageItem
         page={page}
         onShowForm={onShowForm}
