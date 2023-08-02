@@ -1,8 +1,10 @@
 import toast from "react-hot-toast";
 
 class API {
-  // _websiteBase = "http://vita/server";
-  _websiteBase = "https://vita-photofilm.ru/server";
+  _websiteBase =
+    window.location.host === "localhost:3000"
+      ? "http://vita/server"
+      : "https://vita-photofilm.ru/server";
 
   getPages = async () => {
     try {

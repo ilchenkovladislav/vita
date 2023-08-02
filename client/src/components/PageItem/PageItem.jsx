@@ -50,8 +50,11 @@ export function PageItem({
         {isEdit ? <FormEditTitle /> : <Title />}
         <PageSettings pageId={id} />
         <a
-          // href={`http://localhost:3000/page/${link}`}
-          href={`https://vita-photofilm.ru/page/${link}`}
+          href={
+            window.location.host === "localhost:3000"
+              ? `http://localhost:3000/page/${link}`
+              : `https://vita-photofilm.ru/page/${link}`
+          }
           rel="noreferrer"
           target="_blank"
           className="page__link"
