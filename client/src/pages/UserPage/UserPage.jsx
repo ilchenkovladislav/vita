@@ -6,7 +6,7 @@ import { Parser } from "html-to-react";
 import { SkeletonLoader } from "../../components/SkeletonLoader/SkeletonLoader";
 
 import { useFetch } from "../../hooks/useFetch";
-import { ThemeContext, themes } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import API from "../../services/API";
 
 import "./UserPage.scss";
@@ -33,7 +33,6 @@ export const UserPage = () => {
 
       return (
         <section className="userpage__section">
-          <h2>{title}</h2>
           <ul className="userpage__img-list">
             {imgs.map((image) => (
               <li className="userpage__img-item">

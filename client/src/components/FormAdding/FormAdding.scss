@@ -79,6 +79,10 @@ body {
 }
 
 // removing unnecessary items react-draft-wyswyg
+.rdw-option-wrapper {
+  height: 28px;
+}
+
 .rdw-embedded-wrapper {
   display: none;
 }

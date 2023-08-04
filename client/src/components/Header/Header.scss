@@ -1,8 +1,14 @@
 .header {
   display: grid;
-  grid-template-columns: min-content;
   justify-content: end;
-  padding: 20px;
+  padding: 20px 0;
+  width: 1400px;
+  margin: auto;
+}
+
+.header__toggle {
+  display: flex;
+  align-items: center;
 }
 
 .header__toggle .react-toggle-track {
@@ -20,14 +26,18 @@
   bottom: auto;
 }
 
+.header__toggle .react-toggle-track-x svg {
+  font-size: 17px;
+}
+
 .header__toggle .react-toggle-thumb {
-  width: 30px;
-  height: 30px;
+  left: 6px;
+  top: auto;
 }
 
 .header__toggle.react-toggle--checked .react-toggle-thumb {
   border-color: #ccc;
-  left: 40px;
+  left: 42px;
 }
 
 .header__toggle.react-toggle--checked .react-toggle-track {

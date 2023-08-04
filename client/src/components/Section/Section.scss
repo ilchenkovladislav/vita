@@ -2,6 +2,12 @@
   margin: 0;
 }
 
+.section__btns {
+  opacity: 0;
+  display: flex;
+  transition: opacity 0.3s;
+}
+
 .section button {
   font-size: 14px;
   border: none;

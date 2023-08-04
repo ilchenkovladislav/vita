@@ -24,7 +24,6 @@
   color: #888;
 
   &:hover {
-    background-color: #eee;
-    color: #222;
+    color: var(--text-color);
   }
 }

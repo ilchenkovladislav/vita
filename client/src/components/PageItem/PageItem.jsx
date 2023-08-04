@@ -59,7 +59,7 @@ export function PageItem({
           target="_blank"
           className="page__link"
         >
-          <TbExternalLink />
+          <TbExternalLink size={20} />
         </a>
       </div>
 
@@ -72,10 +72,10 @@ export function PageItem({
 
       <div className="page__btns">
         <button onClick={() => onShowForm(id)}>
-          <HiOutlineDocumentAdd />
+          <HiOutlineDocumentAdd size={20} />
         </button>
         <button onClick={onRemovePage}>
-          <CgTrashEmpty />
+          <CgTrashEmpty size={20} />
         </button>
       </div>
     </>

@@ -14,4 +14,14 @@
   border-radius: 5px;
   align-items: center;
   background-color: var(--background-color);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--border-color);
+    cursor: pointer;
+  }
+}
+
+.sections__item:hover .section__btns {
+  opacity: 1;
 }

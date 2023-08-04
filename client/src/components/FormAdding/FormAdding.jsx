@@ -18,6 +18,7 @@ export function FormAdding({
 }) {
   const [images, setImages] = useState([]);
 
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editorState, setEditorState] = useState(
     window.localStorage.getItem("comment")
       ? EditorState.createWithContent(
@@ -40,7 +41,12 @@ export function FormAdding({
 
     setSection(content);
 
-    setEditorState(
+    console.log(
+      "content.comment: ",
+      convertFromRaw(JSON.parse(content.comment))
+    );
+
+    setEditorState((prev) =>
       EditorState.createWithContent(convertFromRaw(JSON.parse(content.comment)))
     );
 
@@ -59,6 +65,7 @@ export function FormAdding({
   };
 
   const onEditorStateChange = (editorState) => {
+    console.log("chenge");
     setEditorState(editorState);
 
     const comment = JSON.stringify(
@@ -109,7 +116,7 @@ export function FormAdding({
             onSubmit={onSubmit}
           >
             <div className="formAdding__title">
-              <label htmlFor="title">заголовок</label>
+              <label htmlFor="title">название секции</label>
               <input
                 type="text"
                 id="title"
@@ -127,10 +134,25 @@ export function FormAdding({
               />
             </div>
             <div className="formAdding__comment">
-              <label htmlFor="comment">комментарии</label>
+              <label htmlFor="comment">текст</label>
               <Editor
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
+                toolbar={{
+                  fontFamily: {
+                    options: [
+                      "Arial",
+                      "Roboto",
+                      "Georgia",
+                      "Impact",
+                      "Tahoma",
+                      "Times New Roman",
+                      "Verdana",
+                      "Comic Sans MS",
+                      "Oswald",
+                    ],
+                  },
+                }}
               />
             </div>
             <button

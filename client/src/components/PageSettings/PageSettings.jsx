@@ -25,7 +25,7 @@ export function PageSettings({ pageId }) {
   return (
     <Popover className="relative">
       <Popover.Button>
-        <CiSettings />
+        <CiSettings size={20} />
       </Popover.Button>
 
       <Popover.Panel className="pageSettings">

@@ -8,12 +8,14 @@ export function Section({ title, onShowForm, onDeleteSection }) {
     <>
       <p className="section__title">{title}</p>
 
-      <button onClick={onShowForm}>
-        <TbPencil />
-      </button>
-      <button onClick={onDeleteSection}>
-        <CgTrashEmpty />
-      </button>
+      <div className="section__btns">
+        <button onClick={onShowForm}>
+          <TbPencil size={20} />
+        </button>
+        <button onClick={onDeleteSection}>
+          <CgTrashEmpty size={20} />
+        </button>
+      </div>
     </>
   );
 }
