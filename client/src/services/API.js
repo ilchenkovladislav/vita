@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 
 class API {
   _websiteBase =
-    window.location.host === "localhost:3000"
+    window.location.host === "localhost:5173"
       ? "http://vita/server"
       : "https://vita-photofilm.ru/server";
 
