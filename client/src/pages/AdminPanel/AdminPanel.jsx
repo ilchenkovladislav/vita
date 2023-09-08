@@ -25,11 +25,11 @@ export function AdminPanel() {
     section.pageId = pageId;
     section.sequence = pages[pageIdx].sections.length;
 
-    API.addSectionOnServer(section).then((sectionId) => {
+    API.addSection(section).then((sectionId) => {
       section.id = Number(sectionId);
 
       if (images.length) {
-        API.addImagesOnServer(images, sectionId);
+        API.addImages(images, sectionId);
       }
 
       const copyPages = [...pages];
@@ -49,8 +49,8 @@ export function AdminPanel() {
 
     setPages(copyPages);
 
-    API.editSectionOnServer(section);
-    API.editImagesOnServer(images, section.id);
+    API.editSection(section);
+    API.editImages(images, section.id);
   };
 
   const onDeleteSection = (pageId, sectionIdx, sectionId) => {
@@ -67,10 +67,10 @@ export function AdminPanel() {
 
     setPages(copyPages);
 
-    API.deleteSectionOnServer(sectionId);
+    API.deleteSection(sectionId);
 
     for (const section of copyPages[pageIdx].sections) {
-      API.editSectionOnServer(section);
+      API.editSection(section);
     }
   };
 
@@ -80,7 +80,7 @@ export function AdminPanel() {
       link: uuidv4(),
     };
 
-    API.addPageOnServer(page).then((id) =>
+    API.addPage(page).then((id) =>
       setPages((prev) => [
         ...prev,
         {
@@ -98,7 +98,7 @@ export function AdminPanel() {
 
     setPages((prev) => [...prev.slice(0, pageIdx), ...prev.slice(pageIdx + 1)]);
 
-    API.removePageOnServer(pageId);
+    API.removePage(pageId);
   };
 
   const onEditPage = (pageId, title) => {
@@ -111,7 +111,7 @@ export function AdminPanel() {
       return [...prev.slice(0, pageIdx), copyPage, ...prev.slice(pageIdx + 1)];
     });
 
-    API.editPageOnServer(pageId, title);
+    API.editPage(pageId, title);
   };
 
   const onDragEnd = (result) => {
@@ -166,7 +166,7 @@ export function AdminPanel() {
       setPages(copyPages);
 
       for (const section of copyPages[pageIdx].sections) {
-        API.editSectionOnServer(section);
+        API.editSection(section);
       }
     }
 
@@ -217,11 +217,11 @@ export function AdminPanel() {
       setPages(copyPages);
 
       for (const section of sectionsSourcePage) {
-        API.editSectionOnServer(section);
+        API.editSection(section);
       }
 
       for (const section of sectionsDestinationPage) {
-        API.editSectionOnServer(section);
+        API.editSection(section);
       }
     }
   };

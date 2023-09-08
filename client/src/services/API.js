@@ -24,7 +24,7 @@ class API {
     return images.map(this._transformImage);
   };
 
-  addSectionOnServer = async (section) => {
+  addSection = async (section) => {
     const form = new FormData();
     form.append("section", JSON.stringify(section));
 
@@ -46,7 +46,7 @@ class API {
     }
   };
 
-  addImagesOnServer = async (images, sectionId) => {
+  addImages = async (images, sectionId) => {
     const form = new FormData();
 
     form.append("sectionId", sectionId);
@@ -68,7 +68,7 @@ class API {
     }
   };
 
-  editSectionOnServer = async (section) => {
+  editSection = async (section) => {
     const form = new FormData();
     form.append("section", JSON.stringify(section));
 
@@ -88,7 +88,7 @@ class API {
     }
   };
 
-  editImagesOnServer = async (images, sectionId) => {
+  editImages = async (images, sectionId) => {
     const form = new FormData();
 
     form.append("sectionId", sectionId);
@@ -123,7 +123,7 @@ class API {
     }
   };
 
-  deleteSectionOnServer = async (sectionId) => {
+  deleteSection = async (sectionId) => {
     try {
       const res = await fetch(`${this._websiteBase}/section.php`, {
         method: "DELETE",
@@ -140,7 +140,7 @@ class API {
     }
   };
 
-  addPageOnServer = async (page) => {
+  addPage = async (page) => {
     try {
       const response = await fetch(`${this._websiteBase}/page.php`, {
         method: "POST",
@@ -159,7 +159,7 @@ class API {
     }
   };
 
-  editPageOnServer = async (pageId, title) => {
+  editPage = async (pageId, title) => {
     try {
       const response = await fetch(`${this._websiteBase}/page.php`, {
         method: "PUT",
@@ -178,7 +178,7 @@ class API {
     }
   };
 
-  removePageOnServer = async (pageId) => {
+  removePage = async (pageId) => {
     try {
       const response = await fetch(`${this._websiteBase}/page.php`, {
         method: "DELETE",
