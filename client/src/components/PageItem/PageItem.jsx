@@ -51,8 +51,8 @@ export function PageItem({
         <PageSettings pageId={id} />
         <a
           href={
-            window.location.host === "localhost:3000"
-              ? `http://localhost:3000/page/${link}`
+            window.location.host === "localhost:5173"
+              ? `http://localhost:5173/page/${link}`
               : `https://vita-photofilm.ru/page/${link}`
           }
           rel="noreferrer"
