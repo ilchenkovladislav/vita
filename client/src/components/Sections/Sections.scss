@@ -1,27 +1,27 @@
 .sections {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 5px;
+    list-style: none;
 }
 
 .sections__item {
-  display: grid;
-  grid-template-columns: 1fr min-content min-content;
-  padding: 10px;
-  padding-right: 0;
-  border-radius: 5px;
-  align-items: center;
-  background-color: var(--background-color);
-  transition: background-color 0.3s;
+    display: grid;
+    align-items: center;
+    padding: 10px;
+    padding-right: 0;
+    border-radius: 5px;
+    background-color: var(--background-color);
+    grid-template-columns: 1fr min-content min-content;
+    transition: background-color 0.3s;
 
-  &:hover {
-    background-color: var(--border-color);
-    cursor: pointer;
-  }
+    &:hover {
+        background-color: var(--border-color);
+        cursor: pointer;
+    }
 }
 
 .sections__item:hover .section__btns {
-  opacity: 1;
+    opacity: 1;
 }
