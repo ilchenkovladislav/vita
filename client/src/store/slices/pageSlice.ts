@@ -23,6 +23,7 @@ export interface Page {
     title: string;
     link: string;
     sections: Section[];
+    theme?: string;
 }
 
 interface PageState {

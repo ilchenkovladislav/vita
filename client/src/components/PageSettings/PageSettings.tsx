@@ -5,21 +5,28 @@ import { CiSettings } from 'react-icons/ci';
 
 import './PageSettings.scss';
 import API from '../../services/API';
+import { Page } from '../../store/slices/pageSlice.ts';
 
-export default function PageSettings({ pageId }) {
+interface PageSettingsProps {
+    page: Page;
+}
+
+export function PageSettings({ page }: PageSettingsProps) {
+    const { theme, id } = page;
     const [colorScheme, setColorScheme] = useState(null);
 
     useEffect(() => {
-        API.getPageTheme(pageId).then((theme) => {
-            if (!theme) return;
-            setColorScheme(theme);
-        });
-    }, [pageId]);
+        setColorScheme(theme);
+    }, [theme]);
 
     function onChangeColorScheme(value) {
         if (!value) return;
         setColorScheme(value);
-        API.setPageSettings(pageId, { theme: value });
+        if (theme) {
+            API.updatePageSettings(id, { theme: value });
+        } else {
+            API.createPageSettings(id, { theme: value });
+        }
     }
 
     return (

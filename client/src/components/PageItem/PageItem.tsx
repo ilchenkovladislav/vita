@@ -1,11 +1,11 @@
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 
 import { HiOutlineDocumentAdd } from 'react-icons/hi';
 import { CgTrashEmpty } from 'react-icons/cg';
 import { TbExternalLink } from 'react-icons/tb';
 
 import { Sections } from '../Sections/Sections';
-import { PageSettingsAsync } from '../PageSettings/PageSettingsAsync.ts';
+import { PageSettings } from '../PageSettings/PageSettings.tsx';
 import './PageItem.scss';
 import { Page, pageAsyncActions } from '../../store/slices/pageSlice';
 import { useActionCreators } from '../../store/hooks';
@@ -64,9 +64,7 @@ export function PageItem({ page, onShowForm, onRemovePage }) {
         <>
             <div className="page__header">
                 {isEdit ? <FormEditTitle /> : <Title />}
-                <Suspense fallback={<p>Загрузка...</p>}>
-                    <PageSettingsAsync pageId={page.id} />
-                </Suspense>
+                <PageSettings page={page} />
                 <a
                     href={
                         window.location.host === 'localhost:5173'

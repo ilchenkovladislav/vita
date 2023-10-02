@@ -245,16 +245,29 @@ class API {
         }
     };
 
-    setPageSettings = async (pageId, settings) => {
+    createPageSettings = async (pageId, settings) => {
         try {
-            const response = await fetch(`${this._websiteBase}/settings.php`, {
-                method: 'POST',
-                body: JSON.stringify({ pageId, settings }),
-            });
+            const res = await Axios.post<ServerResponse>(
+                'setting/create.php',
+                JSON.stringify({ pageId, settings }),
+            );
 
-            const result = await response.json();
+            res.status
+                ? toast.success('Настройки успешно сохранены')
+                : toast.error('Произошла ошибка');
+        } catch (error) {
+            toast.error(`Произошла ошибка: ${error}`);
+        }
+    };
 
-            result.status
+    updatePageSettings = async (pageId, settings) => {
+        try {
+            const res = await Axios.post<ServerResponse>(
+                'setting/update.php',
+                JSON.stringify({ pageId, settings }),
+            );
+
+            res.status
                 ? toast.success('Настройки успешно сохранены')
                 : toast.error('Произошла ошибка');
         } catch (error) {
