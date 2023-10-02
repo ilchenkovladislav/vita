@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
-// import draftToHtml from 'draftjs-to-html';
 import { Parser } from 'html-to-react';
 import { SkeletonLoader } from '../../components/SkeletonLoader/SkeletonLoader';
 
@@ -10,6 +9,7 @@ import { ThemeContext } from '../../contexts/ThemeContext';
 import API from '../../services/API';
 
 import './UserPage.scss';
+import 'react-quill/dist/quill.snow.css';
 
 export const UserPage = () => {
     const { href } = useParams();
@@ -50,8 +50,8 @@ export const UserPage = () => {
     if (isLoading) return <SkeletonLoader />;
     if (data)
         return (
-            <div className="userpage__container">
-                <div className="userpage">
+            <div className="userpage__container ql-snow">
+                <div className="userpage ql-editor">
                     <h1>{data.title}</h1>
                     {renderSections()}
                 </div>

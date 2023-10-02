@@ -26,9 +26,22 @@ const fontSizeArr = [
     '98px',
 ];
 
+const fonts = [
+    'Arial',
+    'Roboto',
+    'Helvetica',
+    'Times New Roman',
+    'Comic Sans MS',
+    'Impact',
+    'Oswald',
+];
+
 const Size = Quill.import('attributors/style/size');
+const Font = Quill.import('attributors/style/font');
 Size.whitelist = fontSizeArr;
+Font.whitelist = fonts;
 Quill.register(Size, true);
+Quill.register(Font, true);
 
 export const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
     return (
@@ -51,7 +64,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
                     [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-                    [{ font: [] }],
+                    [{ font: fonts }],
                     [{ align: [] }],
 
                     ['clean'], // remove formatting button
