@@ -14,20 +14,28 @@ export function PageItem({ page, onShowForm, onRemovePage }) {
     const pageActions = useActionCreators(pageAsyncActions);
 
     const [isEdit, setIsEdit] = useState(false);
-    const [input, setInput] = useState(page.title);
+    const [title, setTitle] = useState(page.title);
 
     const onEditPage = (page: Page) => {
         pageActions.updatePage(page);
     };
 
+    const onStoreTitle = () => {
+        setIsEdit(false);
+        onEditPage({ ...page, title });
+    };
+
     const onSubmit = (e) => {
         e.preventDefault();
-        setIsEdit(false);
-        onEditPage({ ...page, title: input });
+        onStoreTitle();
     };
 
     const onChangeInput = (e) => {
-        setInput(e.target.value);
+        setTitle(e.target.value);
+    };
+
+    const onBlurInput = () => {
+        onStoreTitle();
     };
 
     const FormEditTitle = () => {
@@ -36,7 +44,8 @@ export function PageItem({ page, onShowForm, onRemovePage }) {
                 <input
                     type="text"
                     onChange={onChangeInput}
-                    value={input}
+                    value={title}
+                    onBlur={onBlurInput}
                     autoFocus
                 />
             </form>
