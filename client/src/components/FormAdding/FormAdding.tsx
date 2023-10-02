@@ -6,30 +6,28 @@ import { TextEditor } from '../TextEditor/TextEditor';
 import API from '../../services/API';
 import Dropzone from '../Dropzone/Dropzone';
 import './FormAdding.scss';
+import { Section } from '../../store/types.ts';
+import { useActionCreators, useStateSelector } from '../../store/hooks.ts';
+import { getIndexById } from '../../utility/utility.ts';
+import { pageAsyncActions } from '../../store/slices/pageSlice.ts';
 
-export function FormAdding({
-    onAddSection,
-    onEditSection,
-    onCloseForm,
-    content,
-    show,
-}) {
-    const [images, setImages] = useState([]);
+export function FormAdding({ onCloseForm, content, show }) {
+    const pages = useStateSelector((state) => state.pages.items);
+    const pageActionCreator = useActionCreators(pageAsyncActions);
+
+    const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
-
-    const [section, setSection] = useState({
-        title: window.localStorage.getItem('title') ?? '',
-        comment: '',
-        sequence: null,
-        pageId: null,
-    });
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
         if (!content) {
+            setTitle('');
+            setComment('');
+            setImages([]);
             return;
         }
 
-        setSection(content);
+        setTitle(content?.title);
         setComment(content?.comment);
 
         API.getImages(content.id).then((images) => setImages(images));
@@ -38,12 +36,7 @@ export function FormAdding({
     const inputHandler = (e) => {
         const { value } = e.target;
 
-        setSection((prevData) => ({
-            ...prevData,
-            title: value,
-        }));
-
-        window.localStorage.setItem('title', value);
+        setTitle(value);
     };
 
     const onQuillChange = (markdown: string) => {
@@ -62,21 +55,33 @@ export function FormAdding({
         setImages((prevImgs) => [...prevImgs, ...images]);
     };
 
-    const clearLocalStorage = () => {
-        window.localStorage.setItem('title', '');
-        window.localStorage.setItem('comment', '');
+    const onAddSection = (
+        section: { title: string; comment: string; pageId: number },
+        images,
+    ) => {
+        const pageIdx = getIndexById(pages, section.pageId);
+
+        const newSection = {
+            ...section,
+            sequence: pages[pageIdx].sections.length,
+        };
+
+        pageActionCreator.createSection({ section: newSection, images });
+    };
+
+    const onEditSection = (section: Section, images) => {
+        pageActionCreator.updateSections({ sections: [section], images });
     };
 
     const onSubmit = (e) => {
         e.preventDefault();
 
         if (content) {
-            onEditSection({ ...section, comment }, images);
+            onEditSection({ ...content, title, comment }, images);
         } else {
-            onAddSection({ ...section, comment }, images);
+            onAddSection({ title, comment, pageId: content }, images);
         }
 
-        clearLocalStorage();
         onCloseForm();
     };
 
@@ -95,9 +100,8 @@ export function FormAdding({
                             <input
                                 type="text"
                                 id="title"
-                                value={section.title}
+                                value={title ?? ''}
                                 onChange={inputHandler}
-                                autoFocus={!content}
                             />
                         </div>
                         <div className="formAdding__photo">
@@ -111,15 +115,11 @@ export function FormAdding({
                         <div className="formAdding__comment">
                             <label htmlFor="comment">текст</label>
                             <TextEditor
-                                value={comment}
+                                value={comment ?? ''}
                                 onChange={onQuillChange}
                             />
                         </div>
-                        <button
-                            onClick={onSubmit}
-                            className="formAdding__btn"
-                            type="submit"
-                        >
+                        <button className="formAdding__btn" type="submit">
                             сохранить
                         </button>
                     </form>

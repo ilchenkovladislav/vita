@@ -38,7 +38,7 @@ export function Sections({ sections, pageId, onShowForm }) {
                 >
                     <Section
                         title={section.title}
-                        onShowForm={() => onShowForm(pageId, section.id)}
+                        onShowForm={() => onShowForm(section)}
                         onDeleteSection={() =>
                             onDeleteSection(pageId, idxSection)
                         }
