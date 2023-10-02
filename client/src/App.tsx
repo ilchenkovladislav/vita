@@ -25,17 +25,17 @@ function App() {
             <ErrorBoundary>
                 <ThemeProvider>
                     <Header />
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="admin" element={<AdminPanel />} />
+                            <Route path="page/:href" element={<UserPage />} />
+                            <Route
+                                path="*"
+                                element={<h1>Страница не найдена</h1>}
+                            />
+                        </Routes>
+                    </BrowserRouter>
                 </ThemeProvider>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="admin" element={<AdminPanel />} />
-                        <Route path="page/:href" element={<UserPage />} />
-                        <Route
-                            path="*"
-                            element={<h1>Страница не найдена</h1>}
-                        />
-                    </Routes>
-                </BrowserRouter>
             </ErrorBoundary>
         </div>
     );
