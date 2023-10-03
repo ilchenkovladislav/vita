@@ -50,8 +50,8 @@ export const UserPage = () => {
     if (isLoading) return <SkeletonLoader />;
     if (data)
         return (
-            <div className="userpage__container ql-snow">
-                <div className="userpage ql-editor">
+            <div className="userpage__container">
+                <div className="userpage">
                     <h1>{data.title}</h1>
                     {renderSections()}
                 </div>
