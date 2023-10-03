@@ -57,7 +57,7 @@ function updateAll($sections, &$section)
 if (updateAll($sections, $section)) {
     http_response_code(200);
 
-    echo createServerResponse(200, "Секция обновлена", $sections);
+    echo createServerResponse(200, "Секции обновлены", $sections);
 } else {
     http_response_code(503);
 

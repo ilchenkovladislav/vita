@@ -118,8 +118,8 @@ class API {
             );
 
             res.status
-                ? toast.success('Секция успешно изменена')
-                : toast.error('Произошла ошибка, секция не изменена');
+                ? toast.success('Секции обновлены')
+                : toast.error('Произошла ошибка, секции не обновлены');
         } catch (error) {
             toast.error(`Произошла ошибка: ${error}`);
         }
