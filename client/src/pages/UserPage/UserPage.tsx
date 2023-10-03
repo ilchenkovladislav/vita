@@ -33,6 +33,7 @@ export const UserPage = () => {
 
             return (
                 <section className="userpage__section">
+                    <div>{comment}</div>
                     <ul className="userpage__img-list">
                         {imgs.map((image) => (
                             <li className="userpage__img-item">
@@ -40,7 +41,6 @@ export const UserPage = () => {
                             </li>
                         ))}
                     </ul>
-                    <div>{comment}</div>
                 </section>
             );
         });
