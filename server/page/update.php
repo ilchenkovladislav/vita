@@ -28,5 +28,5 @@ if ($page->update()) {
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно обновить страницу");
+    echo createServerResponse(503, "Не удалось обновить страницу");
 }

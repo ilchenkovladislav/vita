@@ -57,11 +57,11 @@ function updateAll($sections, &$section)
 if (updateAll($sections, $section)) {
     http_response_code(200);
 
-    echo createServerResponse(200, "Страница обновлена", $sections);
+    echo createServerResponse(200, "Секция обновлена", $sections);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно обновить страницу");
+    echo createServerResponse(503, "Не удалось обновить секцию");
 }
 
 function insertIntoNewImages($db, $sectionId)

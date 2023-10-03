@@ -24,9 +24,9 @@ if ($page->create()) {
     $page->id = $page->getLastId();
     $page->sections = [];
 
-    echo createServerResponse(201, "Страница создана.", [$page]);
+    echo createServerResponse(201, "Страница создана", [$page]);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно создать страницу.");
+    echo createServerResponse(503, "Не удалось создать страницу");
 }

@@ -32,18 +32,18 @@ if ($data) {
 
         if (empty($errors)) {
             http_response_code(201);
-            echo createServerResponse(201, "Section created.", ["section" => $section, "images" => $images]);
+            echo createServerResponse(201, "Секция создана", ["section" => $section, "images" => $images]);
         } else {
             http_response_code(500);
-            echo createServerResponse(500, "Some images couldn't be created.", ["errors" => $errors]);
+            echo createServerResponse(500, "Ошибка из-за изображений", ["errors" => $errors]);
         }
     } else {
         http_response_code(500);
-        echo createServerResponse(500, "Unable to create section.");
+        echo createServerResponse(500, "Не удалось создать секцию");
     }
 } else {
     http_response_code(400);
-    echo createServerResponse(400, "Invalid JSON data received.");
+    echo createServerResponse(400, "Некорректные данные");
 }
 
 function moveAndCreateImages($db, $sectionId, &$errors)

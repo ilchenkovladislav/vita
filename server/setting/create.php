@@ -23,9 +23,9 @@ if ($setting->create()) {
 
     $setting->id = $setting->getLastId();
 
-    echo createServerResponse(201, "Страница создана.", [$setting]);
+    echo createServerResponse(201, "Настройки обновлены", [$setting]);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно создать страницу.");
+    echo createServerResponse(503, "Не удалось обновить настройки");
 }

@@ -65,5 +65,5 @@ if ($num > 0) {
 } else {
     http_response_code(404);
 
-    echo createServerResponse(404, "Страницы не найдены.");
+    echo createServerResponse(404, "Страницы не найдены");
 }

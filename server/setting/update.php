@@ -22,9 +22,9 @@ $setting->pageId = $data->pageId;
 if ($setting->update()) {
     http_response_code(200);
 
-    echo createServerResponse(200, "Страница обновлена", [$setting]);
+    echo createServerResponse(200, "Настройки обновлены", [$setting]);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно обновить страницу");
+    echo createServerResponse(503, "Не удалось обновить настройки");
 }

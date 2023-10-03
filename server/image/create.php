@@ -23,11 +23,11 @@ $images = createRecords($db, $errors);
 if (count($errors) === 0) {
     http_response_code(201);
 
-    echo createServerResponse(201, "Изображения добавлены.", $images);
+    echo createServerResponse(201, "Изображения добавлены", $images);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Невозможно добавить изображение.");
+    echo createServerResponse(503, "Не удалось добавить изображения");
 }
 
 function createRecords($db, &$errors)

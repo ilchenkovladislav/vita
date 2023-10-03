@@ -25,9 +25,9 @@ $section->sequence = $data->sequence;
 if ($section->delete()) {
     http_response_code(200);
 
-    echo createServerResponse(200, "Страница удалена", [$section]);
+    echo createServerResponse(200, "Секция удалена", [$section]);
 } else {
     http_response_code(503);
 
-    echo createServerResponse(503, "Не удалось удалить страницу");
+    echo createServerResponse(503, "Не удалось удалить секцию");
 }
