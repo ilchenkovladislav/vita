@@ -27,8 +27,8 @@ export function FormAdding({ onCloseForm, content, show }) {
             return;
         }
 
-        setTitle(content?.title);
-        setComment(content?.comment);
+        setTitle(content?.title ?? '');
+        setComment(content?.comment ?? '');
 
         API.getImages(content.id).then((images) => setImages(images));
     }, [content]);
