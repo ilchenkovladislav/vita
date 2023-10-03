@@ -315,8 +315,10 @@ const getPages = createAppAsyncThunk<unknown>(
 
 const createPage = createAppAsyncThunk<unknown>(
     'pages/createPage',
-    async (page, { rejectWithValue }) =>
-        await Axios.post<ServerResponse>(
+    async (page, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
+
+        return await Axios.post<ServerResponse>(
             'page/create.php',
             JSON.stringify(page),
         )
@@ -328,13 +330,19 @@ const createPage = createAppAsyncThunk<unknown>(
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается создать страницу`,
                 ),
-            ),
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
+    },
 );
 
 const updatePage = createAppAsyncThunk<unknown>(
     'pages/updatePage',
-    async (page, { rejectWithValue }) =>
-        await Axios.post<ServerResponse>('page/update.php', page)
+    async (page, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
+
+        return await Axios.post<ServerResponse>('page/update.php', page)
             .then((res) => {
                 toast.success(res.data.message);
                 return res.data.records;
@@ -343,13 +351,21 @@ const updatePage = createAppAsyncThunk<unknown>(
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается обновить страницу`,
                 ),
-            ),
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
+    },
 );
 
 const deletePage = createAppAsyncThunk<unknown>(
     'pages/deletePage',
-    async (pageId, { rejectWithValue }) =>
-        await Axios.post<ServerResponse>('page/delete.php', { id: pageId })
+    async (pageId, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
+
+        return await Axios.post<ServerResponse>('page/delete.php', {
+            id: pageId,
+        })
             .then((res) => {
                 toast.success(res.data.message);
                 return res.data.records;
@@ -358,7 +374,11 @@ const deletePage = createAppAsyncThunk<unknown>(
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается удалить страницу`,
                 ),
-            ),
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
+    },
 );
 
 const createSection = createAppAsyncThunk<
@@ -367,6 +387,7 @@ const createSection = createAppAsyncThunk<
 >(
     'sections/createSection',
     async ({ section, images }, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
         const formData = new FormData();
 
         formData.append('section', JSON.stringify(section));
@@ -389,7 +410,10 @@ const createSection = createAppAsyncThunk<
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается создать секцию`,
                 ),
-            );
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
     },
 );
 
@@ -399,6 +423,7 @@ const updateSections = createAppAsyncThunk<
 >(
     'sections/updateSections',
     async ({ sections, images }, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
         const form = new FormData();
 
         form.append('sections', JSON.stringify(sections));
@@ -438,14 +463,19 @@ const updateSections = createAppAsyncThunk<
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается обновить секцию`,
                 ),
-            );
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
     },
 );
 
 const deleteSection = createAppAsyncThunk<unknown>(
     'sections/deleteSection',
-    async (section, { rejectWithValue }) =>
-        await Axios.post<ServerResponse>(
+    async (section, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
+
+        return await Axios.post<ServerResponse>(
             'section/delete.php',
             JSON.stringify(section),
         )
@@ -457,7 +487,11 @@ const deleteSection = createAppAsyncThunk<unknown>(
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается удалить секцию`,
                 ),
-            ),
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
+    },
 );
 
 export const pageAsyncActions = {
