@@ -1,19 +1,24 @@
 .admin__panel {
-    max-width: 1400px;
-    margin: auto;
+    width: 100%;
+
+    @media (width <= 1319px) {
+        padding: 0 20px;
+    }
+
+    @media (width >= 900px) {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 }
 
 .page__add {
-    width: 75px;
-    height: 75px;
-    align-self: center;
-    border: 2px solid var(--border-color);
-    border-radius: 50%;
+    padding: 15px 25px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
     background-color: var(--background-color);
     color: var(--text-color);
     cursor: pointer;
-    font-size: 36px;
-    justify-self: center;
+    font-size: 18px;
 
     &:hover {
         opacity: 0.6;

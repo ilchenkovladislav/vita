@@ -159,7 +159,7 @@ export const pageSlice = createSlice({
                 state.status = 'success';
 
                 if (Array.isArray(action.payload)) {
-                    state.items = action.payload.map((page) => ({
+                    state.items = action.payload.reverse().map((page) => ({
                         ...page,
                         sections: page.sections.sort(
                             (a, b) => a.sequence - b.sequence,
@@ -175,7 +175,7 @@ export const pageSlice = createSlice({
                 state.status = 'success';
 
                 if (Array.isArray(action.payload)) {
-                    state.items.push(...[...action.payload]);
+                    state.items.unshift(...[...action.payload]);
                 }
             },
         );

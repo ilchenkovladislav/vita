@@ -1,16 +1,14 @@
 .page__list {
     display: grid;
     align-content: center;
-    justify-content: center;
-    padding: 150px 0;
+    padding: 0;
     gap: 30px;
-    grid-template-columns: repeat(auto-fill, 430px);
+    grid-template-columns: repeat(auto-fill, 440px);
     list-style: none;
 }
 
 .page__item {
     display: grid;
-    flex: 1 1 300px;
     padding: 30px;
     border: 2px solid var(--border-color);
     border-radius: 5px;

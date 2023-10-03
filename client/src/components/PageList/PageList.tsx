@@ -34,23 +34,21 @@ export function PageList({ onShowForm }) {
         dispatch(pageActions.onDragEnd(result));
     };
 
-    const elements = pages.map((page) => (
-        <li key={page.id} className="page__item">
-            <PageItem
-                page={page}
-                onShowForm={onShowForm}
-                onRemovePage={() => onRemovePage(page.id)}
-            />
-        </li>
-    ));
-
     return (
         <DragDropContext onDragEnd={onDragEnd}>
+            <button onClick={onAddPage} className="page__add">
+                Создать страницу
+            </button>
             <ul className="page__list">
-                {elements}
-                <button onClick={onAddPage} className="page__add">
-                    +
-                </button>
+                {pages.map((page) => (
+                    <li key={page.id} className="page__item">
+                        <PageItem
+                            page={page}
+                            onShowForm={onShowForm}
+                            onRemovePage={() => onRemovePage(page.id)}
+                        />
+                    </li>
+                ))}
             </ul>
         </DragDropContext>
     );
