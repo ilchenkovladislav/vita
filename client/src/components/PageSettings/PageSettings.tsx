@@ -14,6 +14,7 @@ interface PageSettingsProps {
 export function PageSettings({ page }: PageSettingsProps) {
     const { theme, id } = page;
     const [colorScheme, setColorScheme] = useState(null);
+    const [isCreated, setIsCreated] = useState(false);
 
     useEffect(() => {
         setColorScheme(theme);
@@ -22,10 +23,11 @@ export function PageSettings({ page }: PageSettingsProps) {
     function onChangeColorScheme(value) {
         if (!value) return;
         setColorScheme(value);
-        if (theme) {
+        if (theme || isCreated) {
             API.updatePageSettings(id, { theme: value });
         } else {
             API.createPageSettings(id, { theme: value });
+            setIsCreated(true);
         }
     }
 
