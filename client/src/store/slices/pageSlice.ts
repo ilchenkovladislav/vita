@@ -320,7 +320,10 @@ const createPage = createAppAsyncThunk<unknown>(
             'page/create.php',
             JSON.stringify(page),
         )
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается создать страницу`,
@@ -332,7 +335,10 @@ const updatePage = createAppAsyncThunk<unknown>(
     'pages/updatePage',
     async (page, { rejectWithValue }) =>
         await Axios.post<ServerResponse>('page/update.php', page)
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается обновить страницу`,
@@ -344,7 +350,10 @@ const deletePage = createAppAsyncThunk<unknown>(
     'pages/deletePage',
     async (pageId, { rejectWithValue }) =>
         await Axios.post<ServerResponse>('page/delete.php', { id: pageId })
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается удалить страницу`,
@@ -372,7 +381,10 @@ const createSection = createAppAsyncThunk<
                 },
             },
         )
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается создать секцию`,
@@ -418,7 +430,10 @@ const updateSections = createAppAsyncThunk<
                 'Content-Type': 'multipart/form-data',
             },
         })
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается обновить секцию`,
@@ -434,7 +449,10 @@ const deleteSection = createAppAsyncThunk<unknown>(
             'section/delete.php',
             JSON.stringify(section),
         )
-            .then((res) => res.data.records)
+            .then((res) => {
+                toast.success(res.data.message);
+                return res.data.records;
+            })
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается удалить секцию`,
