@@ -1,6 +1,7 @@
 <?php
 require_once("headers.php");
 require("DbConnect.php");
+require_once("./utility/getFullPathToFolder.php");
 
 $conn = new DbConnect;
 $db = $conn->connect();
@@ -103,7 +104,7 @@ switch ($method) {
             $images = selectSectionImages($db, $page["sections"][$i]);
 
             for ($j = 0; $j < count($images); $j++) {
-                $images[$j]["path"] = "http://vita/server/files/" . $images[$j]["path"];
+                $images[$j]["path"] = getFullPathToFolder($images[$j]["path"]);
             }
 
             $page["sections"][$i]["imgs"] = $images;

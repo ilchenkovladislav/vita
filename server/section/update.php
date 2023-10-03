@@ -76,7 +76,7 @@ function insertIntoNewImages($db, $sectionId)
         $tmpFile = $_FILES["newImages"]["tmp_name"][$index];
         $targetPath = getFullPathToFolder($filename);
 
-        if (move_uploaded_file($tmpFile, $targetPath)) {
+        if (move_uploaded_file($tmpFile, $_SERVER["DOCUMENT_ROOT"] . "/server/files/$filename")) {
             $image = new Image($db);
             $image->path = $filename;
             $image->sectionId = $sectionId;

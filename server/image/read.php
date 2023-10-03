@@ -26,7 +26,7 @@ if ($num > 0) {
         $image_item = array(
             "id" => $id,
             "sectionId" => $section_id,
-            "path" => "http://vita/server/files/" . $path
+            "path" => getFullPathToFolder($path)
         );
 
         $images_arr[] = $image_item;

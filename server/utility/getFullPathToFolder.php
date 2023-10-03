@@ -1,5 +1,9 @@
 <?php
 function getFullPathToFolder($filename)
 {
-    return $_SERVER["DOCUMENT_ROOT"] . "/server/files/$filename";
+    if (isset($_SERVER['HTTPS'])) {
+        return "https://" . $_SERVER["SERVER_NAME"] . "/server/files/$filename";
+    } else {
+        return "http://" . $_SERVER["SERVER_NAME"] . "/server/files/$filename";
+    }
 }
