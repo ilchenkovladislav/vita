@@ -76,7 +76,7 @@ export function FormAdding({ onCloseForm, content, show }) {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if (content) {
+        if (content?.id) {
             onEditSection({ ...content, title, comment }, images);
         } else {
             onAddSection({ title, comment, pageId: content }, images);
