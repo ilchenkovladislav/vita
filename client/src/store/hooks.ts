@@ -1,4 +1,8 @@
-import { ActionCreatorsMapObject, bindActionCreators } from '@reduxjs/toolkit';
+import {
+    ActionCreatorsMapObject,
+    bindActionCreators,
+    createAsyncThunk,
+} from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootStore } from './types';
@@ -11,3 +15,9 @@ export const useActionCreators = (actions: ActionCreatorsMapObject) => {
 
     return useMemo(() => bindActionCreators(actions, dispatch), []);
 };
+
+export const useAsyncThunk = () =>
+    createAsyncThunk.withTypes<{
+        rejectValue: string;
+        state: RootStore;
+    }>();

@@ -5,7 +5,8 @@ import { CiSettings } from 'react-icons/ci';
 
 import './PageSettings.scss';
 import API from '../../services/API';
-import { Page } from '../../store/slices/pageSlice.ts';
+
+import { Page } from '../../store/types.ts';
 
 interface PageSettingsProps {
     page: Page;

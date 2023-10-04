@@ -9,6 +9,14 @@ export interface ServerResponse {
     records?: unknown[];
 }
 
+export interface Page {
+    id: number;
+    title: string;
+    link: string;
+    sections: Section[];
+    theme?: string;
+}
+
 export interface Section {
     id: number;
     title: string;

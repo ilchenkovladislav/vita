@@ -1,30 +1,15 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-import {
-    RootStore,
-    ServerResponse,
-    Section,
-    StateStatus,
-    Image,
-} from '../types';
-import { baseServerUrl } from '../../config';
+import { Page, StateStatus } from '../types';
 import API from '../../services/API.ts';
 import { getIndexById } from '../../utility/utility.ts';
-
-// import { transformPage, transformSections } from '../../utility/utility';
-
-const Axios = axios.create({
-    baseURL: baseServerUrl,
-});
-
-export interface Page {
-    id: number;
-    title: string;
-    link: string;
-    sections: Section[];
-    theme?: string;
-}
+import { createPage } from './pages/createPage.ts';
+import { getPages } from './pages/getPages.ts';
+import { updatePage } from './pages/updatePage.ts';
+import { deletePage } from './pages/deletePage.ts';
+import { createSection } from './sections/createSection.ts';
+import { updateSections } from './sections/updateSections.ts';
+import { deleteSection } from './sections/deleteSection.ts';
 
 interface PageState {
     items: Page[];
@@ -78,8 +63,6 @@ export const pageSlice = createSlice({
 
                     destinationSection.sequence = destination.index - 1;
                 }
-
-                // 1 -> 0 2 3 4
 
                 if (source.index > destination.index) {
                     for (const section of pageSections) {
@@ -295,213 +278,6 @@ export const pageSlice = createSlice({
         );
     },
 });
-
-const createAppAsyncThunk = createAsyncThunk.withTypes<{
-    rejectValue: string;
-    state: RootStore;
-}>();
-
-const getPages = createAppAsyncThunk<unknown>(
-    'pages/getPages',
-    async (_, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-
-        return await Axios.get<ServerResponse>('page/read.php')
-            .then((res) => res.data.records)
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается получить данные по страницам`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const createPage = createAppAsyncThunk<unknown>(
-    'pages/createPage',
-    async (page, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-
-        return await Axios.post<ServerResponse>(
-            'page/create.php',
-            JSON.stringify(page),
-        )
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается создать страницу`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const updatePage = createAppAsyncThunk<unknown>(
-    'pages/updatePage',
-    async (page, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-
-        return await Axios.post<ServerResponse>('page/update.php', page)
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается обновить страницу`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const deletePage = createAppAsyncThunk<unknown>(
-    'pages/deletePage',
-    async (pageId, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-
-        return await Axios.post<ServerResponse>('page/delete.php', {
-            id: pageId,
-        })
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается удалить страницу`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const createSection = createAppAsyncThunk<
-    unknown,
-    { section: Section; images: File[] }
->(
-    'sections/createSection',
-    async ({ section, images }, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-        const formData = new FormData();
-
-        formData.append('section', JSON.stringify(section));
-
-        if (images) {
-            images.forEach((image) => formData.append('images[]', image));
-        }
-
-        return await Axios.post<ServerResponse>(
-            'section/create.php',
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        )
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается создать секцию`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const updateSections = createAppAsyncThunk<
-    unknown,
-    { sections: Section[]; images?: Image[] }
->(
-    'sections/updateSections',
-    async ({ sections, images }, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-        const form = new FormData();
-
-        form.append('sections', JSON.stringify(sections));
-
-        if (images) {
-            const newImages = images.filter((image) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return image.arrayBuffer !== undefined;
-            });
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            newImages.forEach((image) => form.append('newImages[]', image));
-
-            const idsOldImages = images
-                .filter((image) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    return image.arrayBuffer === undefined;
-                })
-                .map((el) => el.id);
-
-            form.append('idsOldImages', JSON.stringify(idsOldImages));
-        }
-
-        return await Axios.post<ServerResponse>('section/update.php', form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается обновить секцию`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
-
-const deleteSection = createAppAsyncThunk<unknown>(
-    'sections/deleteSection',
-    async (section, { rejectWithValue }) => {
-        const toastId = toast.loading('Грузим данные...');
-
-        return await Axios.post<ServerResponse>(
-            'section/delete.php',
-            JSON.stringify(section),
-        )
-            .then((res) => {
-                toast.success(res.data.message);
-                return res.data.records;
-            })
-            .catch((err: AxiosError<ServerResponse>) =>
-                rejectWithValue(
-                    `Произошла ошибка: ${err.message}. Не получается удалить секцию`,
-                ),
-            )
-            .finally(() => {
-                toast.dismiss(toastId);
-            });
-    },
-);
 
 export const pageAsyncActions = {
     getPages,

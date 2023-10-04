@@ -7,8 +7,9 @@ import { TbExternalLink } from 'react-icons/tb';
 import { Sections } from '../Sections/Sections';
 import { PageSettings } from '../PageSettings/PageSettings.tsx';
 import './PageItem.scss';
-import { Page, pageAsyncActions } from '../../store/slices/pageSlice';
+import { pageAsyncActions } from '../../store/slices/pageSlice';
 import { useActionCreators } from '../../store/hooks';
+import { Page } from '../../store/types.ts';
 
 export function PageItem({ page, onShowForm, onRemovePage }) {
     const pageActions = useActionCreators(pageAsyncActions);
