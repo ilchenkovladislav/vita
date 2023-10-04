@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { Dialog } from '@headlessui/react';
 import { TextEditor } from '../TextEditor/TextEditor';
@@ -19,12 +19,18 @@ export function FormAdding({ onCloseForm, content, show }) {
     const [comment, setComment] = useState('');
     const [images, setImages] = useState([]);
 
+    const titleRef = useRef<HTMLInputElement>();
+
     useEffect(() => {
         if (!content) {
             setTitle('');
             setComment('');
             setImages([]);
             return;
+        }
+
+        if (!content?.id) {
+            titleRef.current.focus();
         }
 
         setTitle(content?.title ?? '');
@@ -102,6 +108,7 @@ export function FormAdding({ onCloseForm, content, show }) {
                                 id="title"
                                 value={title ?? ''}
                                 onChange={inputHandler}
+                                ref={titleRef}
                             />
                         </div>
                         <div className="formAdding__photo">
