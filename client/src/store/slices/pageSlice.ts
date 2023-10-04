@@ -397,7 +397,10 @@ const createSection = createAppAsyncThunk<
         const formData = new FormData();
 
         formData.append('section', JSON.stringify(section));
-        images.forEach((image) => formData.append('images[]', image));
+
+        if (images) {
+            images.forEach((image) => formData.append('images[]', image));
+        }
 
         return await Axios.post<ServerResponse>(
             'section/create.php',

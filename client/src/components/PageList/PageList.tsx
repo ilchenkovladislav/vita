@@ -11,6 +11,7 @@ import {
     useAppDispatch,
     useStateSelector,
 } from '../../store/hooks';
+import { createSection } from '../../utility/utility.ts';
 
 export function PageList({ onShowForm }) {
     const pages = useStateSelector((state) => state.pages.items);
@@ -34,10 +35,37 @@ export function PageList({ onShowForm }) {
         dispatch(pageActions.onDragEnd(result));
     };
 
+    const onCreateTemplate = async () => {
+        const newPage = {
+            title: 'Новая страница',
+            link: uuidv4(),
+        };
+
+        const response = await pageActionCreator.createPage(newPage);
+        const pageId = response.payload[0].id;
+
+        const newSections = [
+            createSection('Идея', pageId, 0),
+            createSection('Место', pageId, 1),
+            createSection('Цвет', pageId, 2),
+            createSection('Герои', pageId, 3),
+            createSection('Стиль', pageId, 4),
+        ];
+
+        const promises = newSections.map((s) =>
+            pageActionCreator.createSection({ section: s }),
+        );
+
+        await Promise.allSettled(promises);
+    };
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <button onClick={onAddPage} className="page__add">
                 Создать страницу
+            </button>
+            <button onClick={onCreateTemplate} className="page__add">
+                Создать по шаблону
             </button>
             <ul className="page__list">
                 {pages.map((page) => (
