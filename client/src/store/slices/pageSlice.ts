@@ -303,14 +303,20 @@ const createAppAsyncThunk = createAsyncThunk.withTypes<{
 
 const getPages = createAppAsyncThunk<unknown>(
     'pages/getPages',
-    async (_, { rejectWithValue }) =>
-        await Axios.get<ServerResponse>('page/read.php')
+    async (_, { rejectWithValue }) => {
+        const toastId = toast.loading('Грузим данные...');
+
+        return await Axios.get<ServerResponse>('page/read.php')
             .then((res) => res.data.records)
             .catch((err: AxiosError<ServerResponse>) =>
                 rejectWithValue(
                     `Произошла ошибка: ${err.message}. Не получается получить данные по страницам`,
                 ),
-            ),
+            )
+            .finally(() => {
+                toast.dismiss(toastId);
+            });
+    },
 );
 
 const createPage = createAppAsyncThunk<unknown>(
