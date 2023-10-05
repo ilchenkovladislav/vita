@@ -138,76 +138,68 @@ export const pageSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(
             getPages.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                if (Array.isArray(action.payload)) {
-                    state.items = action.payload.reverse().map((page) => ({
-                        ...page,
-                        sections: page.sections.sort(
-                            (a, b) => a.sequence - b.sequence,
-                        ),
-                    }));
-                }
+                state.items = action.payload.reverse().map((page) => ({
+                    ...page,
+                    sections: page.sections.sort(
+                        (a, b) => a.sequence - b.sequence,
+                    ),
+                }));
             },
         );
 
         builder.addCase(
             createPage.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                if (Array.isArray(action.payload)) {
-                    state.items.unshift(...[...action.payload]);
-                }
+                state.items.unshift(...[...action.payload]);
             },
         );
 
         builder.addCase(
             updatePage.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                if (Array.isArray(action.payload)) {
-                    const updatedPageIndex = state.items.findIndex(
-                        (item) => item.id === action.payload[0].id,
-                    );
+                const updatedPageIndex = getIndexById(
+                    state.items,
+                    action.payload[0].id,
+                );
 
-                    state.items[updatedPageIndex] = action.payload[0];
-                }
+                state.items[updatedPageIndex] = action.payload[0];
             },
         );
 
         builder.addCase(
             deletePage.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                if (Array.isArray(action.payload)) {
-                    const deletePageIndex = state.items.findIndex(
-                        (item) => item.id === action.payload[0],
-                    );
-                    state.items.splice(deletePageIndex, 1);
-                }
+                const deletePageIndex = getIndexById(
+                    state.items,
+                    action.payload[0],
+                );
+
+                state.items.splice(deletePageIndex, 1);
             },
         );
 
         builder.addCase(
             createSection.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                const createdSection = action.payload;
+                const createdSection = action.payload.section;
 
-                const pageIdx = state.items.findIndex(
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    (p) => p.id === createdSection.section.pageId,
+                const pageIdx = getIndexById(
+                    state.items,
+                    createdSection.pageId,
                 );
 
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                state.items[pageIdx].sections.push(createdSection.section);
+                state.items[pageIdx].sections.push(createdSection);
             },
         );
 
@@ -238,35 +230,32 @@ export const pageSlice = createSlice({
 
         builder.addCase(
             deleteSection.fulfilled,
-            (state, action: PayloadAction<unknown>) => {
+            (state, action: PayloadAction<any>) => {
                 state.status = 'success';
 
-                if (Array.isArray(action.payload)) {
-                    const deletedSection = action.payload[0];
+                const deletedSection = action.payload[0];
 
-                    const pageIndex = state.items.findIndex(
-                        (item) => item.id === deletedSection.pageId,
-                    );
+                const pageIndex = getIndexById(
+                    state.items,
+                    deletedSection.pageId,
+                );
 
-                    const deletedSectionIndex = state.items[
-                        pageIndex
-                    ].sections.findIndex(
-                        (item) => item.id === deletedSection.id,
-                    );
+                const sections = state.items[pageIndex].sections;
 
-                    state.items[pageIndex].sections = [
-                        ...state.items[pageIndex].sections.slice(
-                            0,
-                            deletedSectionIndex,
-                        ),
-                        ...state.items[pageIndex].sections
-                            .slice(deletedSectionIndex + 1)
-                            .map((section) => ({
-                                ...section,
-                                sequence: section.sequence - 1,
-                            })),
-                    ];
-                }
+                const deletedSectionIndex = getIndexById(
+                    sections,
+                    deletedSection.id,
+                );
+
+                state.items[pageIndex].sections = [
+                    ...sections.slice(0, deletedSectionIndex),
+                    ...sections
+                        .slice(deletedSectionIndex + 1)
+                        .map((section) => ({
+                            ...section,
+                            sequence: section.sequence - 1,
+                        })),
+                ];
             },
         );
 
