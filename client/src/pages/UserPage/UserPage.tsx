@@ -6,17 +6,17 @@ import { SkeletonLoader } from '../../components/SkeletonLoader/SkeletonLoader';
 
 import { useFetch } from '../../hooks/useFetch';
 import { ThemeContext } from '../../contexts/ThemeContext';
-import API from '../../services/API';
 
 import './UserPage.scss';
 import 'react-quill/dist/quill.snow.css';
+import { baseServerUrl } from '../../configs/config.ts';
 
 export const UserPage = () => {
     const { href } = useParams();
     const { setTheme } = useContext(ThemeContext);
 
     const { data, isLoading, hasError, errorMessage } = useFetch(
-        `${API._websiteBase}/page.php`,
+        `${baseServerUrl}/page.php`,
         { link: href },
     );
 
