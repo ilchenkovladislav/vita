@@ -6,7 +6,6 @@
         "@headlessui/react": "^1.7.15",
         "@reduxjs/toolkit": "^1.9.5",
         "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "axios": "^1.5.0",
         "draftjs-to-html": "^0.9.1",
@@ -32,7 +31,8 @@
         "lint": "eslint \"**/*.{ts,tsx}\"",
         "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
         "style": "stylelint \"**/*.scss\"",
-        "style:fix": "stylelint --fix \"**/*.scss\""
+        "style:fix": "stylelint --fix \"**/*.scss\"",
+        "test": "jest"
     },
     "eslintConfig": {
         "extends": [
@@ -53,6 +53,8 @@
         ]
     },
     "devDependencies": {
+        "@testing-library/react": "^14.0.0",
+        "@types/jest": "^29.5.5",
         "@types/react": "^18.2.18",
         "@types/react-dom": "^18.2.7",
         "@types/react-dropzone": "^5.1.0",
@@ -62,12 +64,15 @@
         "eslint": "^8.49.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-react": "^7.33.2",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
         "prettier": "^3.0.3",
         "sass": "^1.56.1",
         "stylelint": "^15.10.3",
         "stylelint-config-idiomatic-order": "^9.0.0",
         "stylelint-config-standard-scss": "^11.0.0",
         "stylelint-order": "^6.0.3",
+        "ts-jest": "^29.1.1",
         "typescript": "^5.1.6",
         "vite": "^4.4.8",
         "vite-plugin-eslint": "^1.8.1",

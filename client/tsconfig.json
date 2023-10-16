@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ESNext",
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
-        "types": ["vite/client"],
+        "types": ["jest", "vite/client"],
         "module": "ESNext",
         "skipLibCheck": true,
         /* Bundler mode */

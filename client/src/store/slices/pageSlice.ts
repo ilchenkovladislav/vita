@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { Page, StateStatus } from '../types';
-import API from '../../services/API.ts';
 import { getIndexById } from '../../utility/utility.ts';
 import { createPage } from './pages/createPage.ts';
 import { getPages } from './pages/getPages.ts';
@@ -10,6 +9,7 @@ import { deletePage } from './pages/deletePage.ts';
 import { createSection } from './sections/createSection.ts';
 import { updateSections } from './sections/updateSections.ts';
 import { deleteSection } from './sections/deleteSection.ts';
+import API from '../../services/API.ts';
 
 interface PageState {
     items: Page[];
@@ -23,117 +23,119 @@ const initialState: PageState = {
     error: '',
 };
 
+const moveWithinSamePage = (state, source, destination) => {
+    const pageIdx = getIndexById(state.items, Number(source.droppableId));
+
+    const pages = state.items;
+
+    const pageSections = pages[pageIdx].sections;
+    const sourceSection = pageSections[source.index];
+    const destinationSection = pageSections[destination.index];
+
+    sourceSection.sequence = destination.index;
+
+    if (source.index < destination.index) {
+        for (const section of pageSections) {
+            if (section.sequence < destination.index) {
+                section.sequence = section.sequence - 1;
+            }
+        }
+
+        destinationSection.sequence = destination.index - 1;
+    }
+
+    if (source.index > destination.index) {
+        for (const section of pageSections) {
+            if (
+                section.sequence > destination.index &&
+                section.sequence < source.index
+            ) {
+                section.sequence = section.sequence + 1;
+            }
+        }
+
+        destinationSection.sequence = destination.index + 1;
+    }
+
+    pageSections.sort((a, b) => a.sequence - b.sequence);
+
+    API.editSections(pages[pageIdx].sections);
+};
+
+const moveBetweenPages = (state, source, destination) => {
+    const sourcePageIdx = getIndexById(state.items, Number(source.droppableId));
+    const destinationPageIdx = getIndexById(
+        state.items,
+        Number(destination.droppableId),
+    );
+
+    const pages = state.items;
+
+    const sectionsSourcePage = pages[sourcePageIdx].sections;
+    const sectionsDestinationPage = pages[destinationPageIdx].sections;
+
+    const sourceSection = sectionsSourcePage[source.index];
+
+    sourceSection.sequence = destination.index;
+    sourceSection.pageId = Number(destination.droppableId);
+
+    sectionsDestinationPage.push(sourceSection);
+
+    sectionsSourcePage.splice(source.index, 1);
+
+    for (const section of sectionsSourcePage) {
+        if (section.sequence > source.index) {
+            section.sequence = section.sequence - 1;
+        }
+    }
+
+    for (const section of sectionsDestinationPage) {
+        if (section.sequence > destination.index) {
+            section.sequence = section.sequence + 1;
+        }
+    }
+
+    const destinationSection = sectionsDestinationPage[destination.index];
+
+    if (destination.index !== sectionsDestinationPage.length - 1) {
+        destinationSection.sequence = destination.index + 1;
+    }
+
+    sectionsSourcePage.sort((a, b) => a.sequence - b.sequence);
+    sectionsDestinationPage.sort((a, b) => a.sequence - b.sequence);
+
+    API.editSections([...sectionsSourcePage, ...sectionsDestinationPage]);
+};
+
+export const onDragEnd = (state, action) => {
+    const { source, destination } = action.payload;
+
+    if (!destination) {
+        return;
+    }
+
+    const isSameDestination =
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index;
+
+    if (isSameDestination) {
+        return;
+    }
+
+    const isSamePage = destination.droppableId === source.droppableId;
+
+    if (isSamePage) {
+        moveWithinSamePage(state, source, destination);
+    } else {
+        moveBetweenPages(state, source, destination);
+    }
+};
+
 export const pageSlice = createSlice({
     name: 'page',
     initialState,
     reducers: {
-        onDragEnd: (state, action) => {
-            const { destination, source } = action.payload;
-
-            if (!destination) {
-                return;
-            }
-
-            if (
-                destination.droppableId === source.droppableId &&
-                destination.index === source.index
-            ) {
-                return;
-            }
-
-            if (destination.droppableId === source.droppableId) {
-                const pageIdx = state.items.findIndex(
-                    (p) => p.id === Number(source.droppableId),
-                );
-
-                const pages = state.items;
-
-                const pageSections = pages[pageIdx].sections;
-                const sourceSection = pageSections[source.index];
-                const destinationSection = pageSections[destination.index];
-
-                sourceSection.sequence = destination.index;
-
-                if (source.index < destination.index) {
-                    for (const section of pageSections) {
-                        if (section.sequence < destination.index) {
-                            section.sequence = section.sequence - 1;
-                        }
-                    }
-
-                    destinationSection.sequence = destination.index - 1;
-                }
-
-                if (source.index > destination.index) {
-                    for (const section of pageSections) {
-                        if (
-                            section.sequence > destination.index &&
-                            section.sequence < source.index
-                        ) {
-                            section.sequence = section.sequence + 1;
-                        }
-                    }
-
-                    destinationSection.sequence = destination.index + 1;
-                }
-
-                pageSections.sort((a, b) => a.sequence - b.sequence);
-
-                API.editSections(pages[pageIdx].sections);
-            }
-
-            if (destination.droppableId !== source.droppableId) {
-                const sourcePageIdx = state.items.findIndex(
-                    (p) => p.id === Number(source.droppableId),
-                );
-
-                const destinationPageIdx = state.items.findIndex(
-                    (p) => p.id === Number(destination.droppableId),
-                );
-
-                const pages = state.items;
-
-                const sectionsSourcePage = pages[sourcePageIdx].sections;
-                const sectionsDestinationPage =
-                    pages[destinationPageIdx].sections;
-
-                const sourceSection = sectionsSourcePage[source.index];
-
-                sourceSection.sequence = destination.index;
-                sourceSection.pageId = Number(destination.droppableId);
-
-                sectionsDestinationPage.push(sourceSection);
-
-                sectionsSourcePage.splice(source.index, 1);
-
-                for (const section of sectionsSourcePage) {
-                    if (section.sequence > source.index) {
-                        section.sequence = section.sequence - 1;
-                    }
-                }
-
-                for (const section of sectionsDestinationPage) {
-                    if (section.sequence > destination.index) {
-                        section.sequence = section.sequence + 1;
-                    }
-                }
-
-                const destinationSection =
-                    sectionsDestinationPage[destination.index];
-
-                if (destination.index !== sectionsDestinationPage.length - 1) {
-                    destinationSection.sequence = destination.index + 1;
-                }
-
-                sectionsSourcePage.sort((a, b) => a.sequence - b.sequence);
-                sectionsDestinationPage.sort((a, b) => a.sequence - b.sequence);
-
-                API.editSections([
-                    ...sectionsSourcePage,
-                    ...sectionsDestinationPage,
-                ]);
-            }
-        },
+        onDragEnd,
     },
     extraReducers(builder) {
         builder.addCase(
