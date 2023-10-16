@@ -1,14 +1,7 @@
 .header {
     display: grid;
-    max-width: 1400px;
     justify-content: end;
     padding: 20px 0;
-    margin: auto;
-}
-
-.header__toggle {
-    display: flex;
-    align-items: center;
 }
 
 .header__toggle .react-toggle-track {
@@ -20,10 +13,11 @@
 
 .header__toggle .react-toggle-track-x,
 .header__toggle .react-toggle-track-check {
+    height: auto;
+    width: auto;
     top: auto;
     bottom: auto;
-    width: auto;
-    height: auto;
+    font-size: 18px;
 }
 
 .header__toggle .react-toggle-track-x svg {

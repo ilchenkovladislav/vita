@@ -15,14 +15,14 @@
 }
 
 .page__item button {
-    padding: 5px;
+    font-size: 20px;
     border: none;
     border-radius: 3px;
+    padding: 5px;
     background-color: transparent;
-    color: #888;
     cursor: pointer;
-    font-size: 14px;
     transition: all 0.2s;
+    color: #888;
 
     &:hover {
         color: var(--text-color);
