@@ -1,29 +1,30 @@
 .page__header {
-  display: grid;
-  grid-template-columns: 1fr 30px 30px;
-  // justify-content: space-between;
-  align-items: center;
+    display: grid;
+
+    // justify-content: space-between;
+    align-items: center;
+    grid-template-columns: 1fr 30px 30px;
 }
 
 .page__title {
-  margin: 0;
+    margin: 0;
 }
 
 .page__link {
-  text-align: center;
+    text-align: center;
 }
 
 .page__item button {
-  font-size: 14px;
-  border: none;
-  border-radius: 3px;
-  padding: 5px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #888;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #888;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
 
-  &:hover {
-    color: var(--text-color);
-  }
+    &:hover {
+        color: var(--text-color);
+    }
 }

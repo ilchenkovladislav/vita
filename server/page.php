@@ -1,6 +1,7 @@
 <?php
 require_once("headers.php");
 require("DbConnect.php");
+require_once("./utility/getFullPathToFolder.php");
 
 $conn = new DbConnect;
 $db = $conn->connect();
@@ -46,7 +47,7 @@ function selectPageSections($db, $page)
 
 function selectSectionImages($db, $section)
 {
-    $sql = "SELECT id, img FROM images WHERE section_id = :section_id";
+    $sql = "SELECT id, path FROM images WHERE section_id = :section_id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':section_id', $section["id"]);
     $stmt->execute();
@@ -103,7 +104,7 @@ switch ($method) {
             $images = selectSectionImages($db, $page["sections"][$i]);
 
             for ($j = 0; $j < count($images); $j++) {
-                $images[$j]["img"] = base64_encode($images[$j]["img"]);
+                $images[$j]["path"] = getFullPathToFolder($images[$j]["path"]);
             }
 
             $page["sections"][$i]["imgs"] = $images;

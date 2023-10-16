@@ -1,50 +1,50 @@
 .header {
-  display: grid;
-  justify-content: end;
-  padding: 20px 0;
-  width: 1400px;
-  margin: auto;
+    display: grid;
+    max-width: 1400px;
+    justify-content: end;
+    padding: 20px 0;
+    margin: auto;
 }
 
 .header__toggle {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .header__toggle .react-toggle-track {
-  height: 30px;
-  width: 70px;
-  display: flex;
-  align-items: center;
+    display: flex;
+    width: 70px;
+    height: 30px;
+    align-items: center;
 }
 
 .header__toggle .react-toggle-track-x,
 .header__toggle .react-toggle-track-check {
-  height: auto;
-  width: auto;
-  top: auto;
-  bottom: auto;
+    top: auto;
+    bottom: auto;
+    width: auto;
+    height: auto;
 }
 
 .header__toggle .react-toggle-track-x svg {
-  font-size: 17px;
+    font-size: 17px;
 }
 
 .header__toggle .react-toggle-thumb {
-  left: 6px;
-  top: auto;
+    top: auto;
+    left: 6px;
 }
 
 .header__toggle.react-toggle--checked .react-toggle-thumb {
-  border-color: #ccc;
-  left: 42px;
+    left: 42px;
+    border-color: #ccc;
 }
 
 .header__toggle.react-toggle--checked .react-toggle-track {
-  background-color: #eee;
+    background-color: #eee;
 }
 
 .header__toggle.react-toggle--checked:hover:not(.react-toggle--disabled)
-  .react-toggle-track {
-  background-color: #ccc;
+    .react-toggle-track {
+    background-color: #ccc;
 }

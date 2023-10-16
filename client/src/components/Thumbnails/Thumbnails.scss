@@ -1,28 +1,28 @@
 .thumb {
-  position: relative;
+    position: relative;
 }
 
 .thumb__img {
-  display: block;
-  max-width: 100%;
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 5px;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 80px;
+    border-radius: 5px;
+    object-fit: cover;
 }
 
 .removeBtn {
-  border: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  background: transparent;
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--text-color);
-  padding: 0;
-  line-height: 1;
-  width: 30px;
-  height: 40px;
-  cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
 }

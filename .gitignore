@@ -1,1 +1,3 @@
-/server/images/
+/server/files/
+.idea
+client/dist/

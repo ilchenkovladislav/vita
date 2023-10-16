@@ -1,25 +1,25 @@
 .section__title {
-  margin: 0;
+    margin: 0;
 }
 
 .section__btns {
-  opacity: 0;
-  display: flex;
-  transition: opacity 0.3s;
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .section button {
-  font-size: 14px;
-  border: none;
-  border-radius: 3px;
-  padding: 5px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #888;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #888;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
 
-  &:hover {
-    background-color: #eee;
-    color: #222;
-  }
+    &:hover {
+        background-color: #eee;
+        color: #222;
+    }
 }

@@ -19,7 +19,7 @@ function executeSql($stmt)
 
 function updatePageSettings($db, $data)
 {
-    $sql = "UPDATE settings SET theme= :theme WHERE page_id = :page_id";
+    $sql = "UPDATE settings SET theme=:theme WHERE page_id=:page_id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':page_id', $data->pageId);
     $stmt->bindParam(':theme', $data->settings->theme);

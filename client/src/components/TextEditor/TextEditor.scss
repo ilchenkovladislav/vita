@@ -1,0 +1,48 @@
+.ql-snow {
+    .ql-picker {
+        &.ql-size, &.ql-font {
+            .ql-picker-label,
+            .ql-picker-item {
+                &::before {
+                    content: attr(data-value) !important;
+                }
+            }
+        }
+    }
+}
+
+.ql-toolbar {
+    border: 1px solid var(--border-color) !important;
+}
+
+.ql-container {
+    border: 1px solid var(--border-color) !important;
+    border-top: none !important;
+}
+
+.ql-stroke {
+    stroke: var(--text-color) !important;
+}
+
+.ql-fill {
+    fill: var(--text-color) !important;
+}
+
+.ql-picker {
+    color: var(--text-color) !important;
+}
+
+.ql-picker-item {
+    color: var(--text-color) !important;
+}
+
+.ql-picker-options {
+    background-color: var(--background-color) !important;
+}
+
+.ql-syntax {
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    background-color: var(--background-color-pre) !important;
+    color: var(--text-color) !important;
+}
